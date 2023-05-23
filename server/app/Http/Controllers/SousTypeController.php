@@ -13,8 +13,13 @@ class SousTypeController extends Controller
         $sous_type = SousType::all();
         return response()->json($sous_type);
     }
+
+    public function index_fk($id){
+        $sous_type = SousType::where('urgence_id', $id)->get();
+        return response()->json($sous_type);
+    }
     
-    public function show( $id){
+    public function show($id){
         $sous_type = SousType::find($id);
 
         if(is_null($sous_type)){
@@ -65,7 +70,7 @@ class SousTypeController extends Controller
     }
 
 
-    public function update(Request $request, SousType $sous_type){
+    public function update(Request $request){
        
         $input = $request->all();
         $validator = Validator::make($input,[
@@ -90,8 +95,8 @@ class SousTypeController extends Controller
                 $input['image'] = $filename;
         }
 
-        $sous_type->fill($input);
-        $sous_type->save();
+        $sous_type=SousType::findOrFail($request->id);
+        $sous_type->update($request->all());
 
         return response()->json([
             'success'=> true,
@@ -101,8 +106,9 @@ class SousTypeController extends Controller
     }
 
 
-    public function destroy(SousType $sous_type){
+    public function destroy($id){
         
+        $sous_type=SousType::findOrFail($id);
         $sous_type->delete();
 
         return response()->json([

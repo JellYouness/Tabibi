@@ -12,8 +12,12 @@ Route::post('login',[PassportAuthController::class,'login']);
 Route::middleware('auth:api')->group(function(){
 
 });
+Route::resource('users',UserController::class);
 Route::resource('patients',PatientController::class);
 Route::resource('medecins',MedecinController::class);
 Route::resource('specialites',SpecialiteController::class);
-Route::resource('urgences',UrgencetController::class);
+Route::resource('urgences',UrgenceController::class);
 Route::resource('soustypes',SousTypeController::class);
+Route::get('soustypes/fk/{id}',[SousTypeController::class,'index_fk']);
+Route::resource('categories',CategorieController::class);
+Route::get('categories/fk/{id}',[CategorieController::class,'index_fk']);

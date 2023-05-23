@@ -15,20 +15,21 @@ import {
     DialogTitle,
     FormControl,
     FormLabel,
-    CircularProgress
+    CircularProgress,
+    Link
 } from '@mui/material';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { Search, Add, BorderColor, ArrowRightAlt } from '@mui/icons-material';
+import { Search, Add } from '@mui/icons-material';
 import MainCard from 'components/MainCard';
 import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import { useTheme } from '@mui/material/styles';
 import '../style.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteUrgence, editUrgence, fetchUrgences, insertUrgence } from 'store/reducers/urgences/urgenceSlice';
+import { deleteCategorie, editCategorie, fetchCategories, insertCategorie } from 'store/reducers/categories/categorieSlice';
 import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router';
 const API = process.env.REACT_APP_API_URL;
 
 const DeleteIcon = styled.a`
@@ -68,11 +69,12 @@ const Red = {
     margin: '0 0 0.2rem 0.2rem'
 };
 
-const Urgences = () => {
+const Categories = () => {
+    let { state } = useLocation();
     const dispatch = useDispatch();
-    const { records, loading, error, record } = useSelector((state) => state.urgences);
+    const { records, loading, error, record } = useSelector((state) => state.categories);
     useEffect(() => {
-        dispatch(fetchUrgences());
+        dispatch(fetchCategories(state.urgence.id));
     }, [dispatch]);
     const rows = records;
     // do {} while (isLoading);
@@ -138,7 +140,7 @@ const Urgences = () => {
     };
 
     const handleDeleteRow = () => {
-        dispatch(deleteUrgence(toBeDeleted.id));
+        dispatch(deleteCategorie(toBeDeleted.id));
         handleDeleteClose();
     };
 
@@ -150,10 +152,11 @@ const Urgences = () => {
                 id: values.id || null,
                 libelle: values.libelle,
                 description: values.description,
+                sous_type_id: state.urgence.id,
                 image: base64URL
             };
-            values.id ? dispatch(editUrgence(values)) : dispatch(insertUrgence(values));
-            dispatch(fetchUrgences());
+            values.id ? dispatch(editCategorie(values)) : dispatch(insertCategorie(values));
+            dispatch(fetchCategories(state.urgence.id));
             handleClose();
             try {
             } catch (error) {
@@ -236,7 +239,7 @@ const Urgences = () => {
                     aria-describedby="alert-dialog-description"
                 >
                     <Box sx={{ p: 1, py: 1.5 }}>
-                        <DialogTitle id="alert-dialog-title">Voulez vous supprimez cet Urgence?</DialogTitle>
+                        <DialogTitle id="alert-dialog-title">Voulez vous supprimez cet Categorie?</DialogTitle>
                         <DialogActions>
                             <Button color="secondary" onClick={handleDeleteClose}>
                                 Annuler
@@ -355,7 +358,10 @@ const Urgences = () => {
             <Stack direction="column" alignItems="center">
                 {loading ? <CircularProgress /> : null}
             </Stack>
-            <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{ marginTop: '1rem' }}>
+            <Typography variant="h5" sx={{ margin: '1rem 0', fontWeight: '500' }}>
+                Les categories du sous-type {state.urgence.libelle}:
+            </Typography>
+            <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                 {rows.map((row, index) => {
                     return (
                         <Grid item xs={3} key={row.id}>
@@ -366,16 +372,6 @@ const Urgences = () => {
                                 }}
                             >
                                 <Stack alignItems="center" spacing={1}>
-                                    <Link
-                                        to="/soustypes"
-                                        state={{ urgence: row }}
-                                        alignSelf="end"
-                                        alignItems="center"
-                                        sx={{ display: 'flex' }}
-                                    >
-                                        Sous-Types
-                                        <ArrowRightAlt />
-                                    </Link>
                                     <div class="avatar-preview">
                                         <div
                                             style={{
@@ -384,7 +380,7 @@ const Urgences = () => {
                                         ></div>
                                     </div>
 
-                                    <Typography variant="h5">"{row.libelle}"</Typography>
+                                    <Typography variant="h5">"{row.libelle}"****</Typography>
                                     <Typography variant="body1">"{row.description}"</Typography>
 
                                     <div>
@@ -421,4 +417,4 @@ const Urgences = () => {
     );
 };
 
-export default Urgences;
+export default Categories;

@@ -8,6 +8,9 @@ import patientSlice from './patients/patientSlice';
 import medecinSlice from './medecins/medecinSlice';
 import specialiteSlice from './specialites/specialiteSlice';
 import urgenceSlice from './urgences/urgenceSlice';
+import soustypeSlice from './soustypes/soustypeSlice';
+import categorieSlice from './categories/categorieSlice';
+import userSlice from './users/userSlice';
 
 // ==============================|| COMBINE REDUCERS ||============================== //
 
@@ -17,7 +20,10 @@ const reducers = combineReducers({
     patients: patientSlice,
     medecins: medecinSlice,
     specialites: specialiteSlice,
-    urgences: urgenceSlice
+    urgences: urgenceSlice,
+    soustypes: soustypeSlice,
+    categories: categorieSlice,
+    users: userSlice
 });
 
 export default reducers;

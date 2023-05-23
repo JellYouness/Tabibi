@@ -13,6 +13,11 @@ class CategorieController extends Controller
         $categorie = Categorie::all();
         return response()->json($categorie);
     }
+
+    public function index_fk($id){
+        $categorie = Categorie::where('sous_type_id', $id)->get();
+        return response()->json($categorie);
+    }
     
     public function show( $id){
         $categorie = Categorie::find($id);
@@ -65,7 +70,7 @@ class CategorieController extends Controller
     }
 
 
-    public function update(Request $request, Categorie $categorie){
+    public function update(Request $request){
        
         $input = $request->all();
         $validator = Validator::make($input,[
@@ -91,8 +96,8 @@ class CategorieController extends Controller
                 $input['image'] = $filename;
         }
 
-        $categorie->fill($input);
-        $categorie->save();
+        $categorie=Categorie::findOrFail($request->id);
+        $categorie->update($request->all());
 
         return response()->json([
             'success'=> true,
@@ -102,8 +107,8 @@ class CategorieController extends Controller
     }
 
 
-    public function destroy(Categorie $categorie){
-        
+    public function destroy($id){
+        $categorie=Categorie::findOrFail($id);
         $categorie->delete();
 
         return response()->json([

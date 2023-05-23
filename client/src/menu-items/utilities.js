@@ -57,6 +57,22 @@ const utilities = {
             type: 'item',
             url: '/utilisateurs',
             icon: icons.ManageAccountsOutlined
+        },
+        {
+            id: 'util-soustypes',
+            title: 'Soustypes',
+            type: 'item',
+            url: '/soustypes',
+            icon: icons.MedicalServicesOutlined,
+            hidden: true
+        },
+        {
+            id: 'util-categories',
+            title: 'Categories',
+            type: 'item',
+            url: '/categories',
+            icon: icons.MedicalServicesOutlined,
+            hidden: true
         }
     ]
 };
