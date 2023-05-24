@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('libelle');
             $table->string('description');
             $table->string('image')->nullable();
-            $table->foreignIdFor(Urgence::class)->onDelete(null);
+            $table->foreignIdFor(Urgence::class)->nullOnDelete();
             $table->timestamps();
         });
     }

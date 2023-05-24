@@ -4,6 +4,7 @@ import { Link as RouterLink } from 'react-router-dom';
 
 // material-ui
 import {
+    Avatar,
     Box,
     Link,
     Stack,
@@ -14,39 +15,28 @@ import {
     TableHead,
     TablePagination,
     TableRow,
-    Typography,
-    Chip
+    Typography
 } from '@mui/material';
-import { Add } from '@mui/icons-material';
 
 // third-party
 import NumberFormat from 'react-number-format';
 
 // project import
 import Dot from 'components/@extended/Dot';
-import styled from 'styled-components';
-import { useTheme } from '@mui/material/styles';
 
-const EditIcon = styled.a`
-    padding: 4px 3px;
-    border-radius: 4px;
-    &:hover {
-    background-color: #bbdefb
-    ;
-`;
 function createData(trackingNo, name, fat, carbs, protein) {
     return { trackingNo, name, fat, carbs, protein };
 }
 
 const rows = [
-    createData(84564564, 'Camera Lens', 40, 2, 40570),
+    createData(84564564, 'Camera Lens', 40, 1, 40570),
     createData(98764564, 'Laptop', 300, 0, 180139),
     createData(98756325, 'Mobile', 355, 1, 90989),
     createData(98652366, 'Handset', 50, 1, 10239),
     createData(13286564, 'Computer Accessories', 100, 1, 83348),
     createData(86739658, 'TV', 99, 0, 410780),
-    createData(13256498, 'Keyboard', 125, 2, 70999),
-    createData(98753263, 'Mouse', 89, 2, 10570),
+    createData(13256498, 'Keyboard', 125, 1, 70999),
+    createData(98753263, 'Mouse', 89, 0, 10570),
     createData(98753275, 'Desktop', 185, 1, 98063),
     createData(98753291, 'Chair', 100, 0, 14001)
 ];
@@ -79,48 +69,9 @@ function stableSort(array, comparator) {
 
 // ==============================|| ORDER TABLE - HEADER CELL ||============================== //
 
-const headCells = [
-    {
-        id: 'Categorie',
-        align: 'left',
-        disablePadding: true,
-        label: 'Categorie'
-    },
-    {
-        id: 'Urgence',
-        align: 'left',
-        disablePadding: false,
-        label: 'Urgence'
-    },
-    {
-        id: 'patient',
-        align: 'right',
-        disablePadding: false,
-        label: 'Patient'
-    },
-    {
-        id: 'date',
-        align: 'right',
-        disablePadding: false,
-        label: 'Date'
-    },
-    {
-        id: 'traite',
-        align: 'left',
-        disablePadding: false,
-        label: 'Traité'
-    },
-    {
-        id: 'medecin',
-        align: 'left',
-        disablePadding: false,
-        label: 'Medecin'
-    }
-];
-
 // ==============================|| ORDER TABLE - HEADER ||============================== //
 
-function OrderTableHead({ order, orderBy }) {
+function MedecinOnlineHead({ order, orderBy }) {
     return (
         <TableHead>
             <TableRow>
@@ -139,7 +90,7 @@ function OrderTableHead({ order, orderBy }) {
     );
 }
 
-OrderTableHead.propTypes = {
+MedecinOnlineHead.propTypes = {
     order: PropTypes.string,
     orderBy: PropTypes.string
 };
@@ -152,12 +103,12 @@ const OrderStatus = ({ status }) => {
 
     switch (status) {
         case 0:
-            color = 'warning';
-            title = 'Pending';
+            color = 'secondary';
+            title = '';
             break;
         case 1:
             color = 'success';
-            title = 'Approved';
+            title = '';
             break;
         case 2:
             color = 'error';
@@ -169,8 +120,11 @@ const OrderStatus = ({ status }) => {
     }
 
     return (
-        <Stack direction="row" spacing={1} alignItems="center">
-            <Chip label={title} color={color} />
+        <Stack direction="row" spacing={1} alignItems="center" justifyContent="flex-end">
+            <Typography variant="caption" color="secondary">
+                {title}
+            </Typography>
+            <Dot color={color} size={10} />
         </Stack>
     );
 };
@@ -181,13 +135,11 @@ OrderStatus.propTypes = {
 
 // ==============================|| ORDER TABLE ||============================== //
 
-const OrderTable = () => {
-    const theme = useTheme();
+const MedecinOnline = () => {
     const [order] = useState('asc');
     const [orderBy] = useState('trackingNo');
-    const [selected] = useState([]);
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -197,8 +149,6 @@ const OrderTable = () => {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
-
-    const isSelected = (trackingNo) => selected.indexOf(trackingNo) !== -1;
 
     return (
         <Box>
@@ -223,44 +173,34 @@ const OrderTable = () => {
                         }
                     }}
                 >
-                    <OrderTableHead order={order} orderBy={orderBy} />
                     <TableBody>
                         {stableSort(rows, getComparator(order, orderBy))
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((row, index) => {
-                                const isItemSelected = isSelected(row.trackingNo);
                                 const labelId = `enhanced-table-checkbox-${index}`;
 
                                 return (
                                     <TableRow
                                         hover
-                                        role="checkbox"
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                        aria-checked={isItemSelected}
                                         tabIndex={-1}
                                         key={row.trackingNo}
-                                        selected={isItemSelected}
                                     >
-                                        <TableCell component="th" id={labelId} scope="row" align="left">
-                                            <Link color="secondary" component={RouterLink} to="">
-                                                {row.trackingNo}
-                                            </Link>
-                                        </TableCell>
-                                        <TableCell align="left">{row.name}</TableCell>
-                                        <TableCell align="right">{row.fat}</TableCell>
-                                        <TableCell align="right">
-                                            <NumberFormat value={row.protein} displayType="text" thousandSeparator prefix="$" />
-                                        </TableCell>
                                         <TableCell align="left">
-                                            <OrderStatus status={row.carbs} />
+                                            <Stack direction="row" spacing={2} alignItems="center">
+                                                <Avatar alt="" src="" height={30} />
+                                                <Stack direction="column">
+                                                    <Typography variant="subtitle1" minWidth="100%">
+                                                        {row.name}
+                                                    </Typography>
+                                                    <Typography variant="subtitle2" color="textSecondary" fontWeight="normal">
+                                                        {row.protein}
+                                                    </Typography>
+                                                </Stack>
+                                            </Stack>
                                         </TableCell>
-                                        <TableCell align="center">
-                                            <EditIcon>
-                                                <Add
-                                                    style={{ color: theme.palette.primary.main, cursor: 'pointer', fontSize: '20px' }}
-                                                    onClick={() => handleClickOpen(row)}
-                                                />
-                                            </EditIcon>
+                                        <TableCell align="right">
+                                            <OrderStatus status={row.carbs} />
                                         </TableCell>
                                     </TableRow>
                                 );
@@ -276,9 +216,10 @@ const OrderTable = () => {
                 page={page}
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
+                labelRowsPerPage="Lignes"
             />
         </Box>
     );
 };
 
-export default OrderTable;
+export default MedecinOnline;

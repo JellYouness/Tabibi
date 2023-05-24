@@ -21,3 +21,8 @@ Route::resource('soustypes',SousTypeController::class);
 Route::get('soustypes/fk/{id}',[SousTypeController::class,'index_fk']);
 Route::resource('categories',CategorieController::class);
 Route::get('categories/fk/{id}',[CategorieController::class,'index_fk']);
+Route::resource('traitements',TraitementController::class);
+Route::get('traitements/patients/{id}',[TraitementController::class,'index_patient']);
+Route::get('traitements/medecins/{id}',[TraitementController::class,'index_medecin']);
+Route::get('traitements/consulte',[TraitementController::class,'index_consulte']);
+Route::get('traitements/nonconsulte',[TraitementController::class,'index_nonconsulte']);

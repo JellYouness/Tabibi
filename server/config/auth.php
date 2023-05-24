@@ -70,8 +70,9 @@ return [
         ],
 
         // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
+        //     'driver' => 'eloquent',
+        //     'table' => 'patients',
+        //     'model' => App\Models\Patient::class,
         // ],
     ],
 

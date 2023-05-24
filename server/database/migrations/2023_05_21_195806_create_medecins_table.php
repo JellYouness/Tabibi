@@ -26,8 +26,9 @@ return new class extends Migration
             $table->string('adresse');
             $table->string('image')->nullable();
             $table->string('password')->default('12345678');
+            $table->boolean('online')->default(false);
             $table->rememberToken();
-            $table->foreignIdFor(Specialite::class)->onDelete(null);
+            $table->foreignIdFor(Specialite::class)->nullOnDelete();
             $table->timestamps();
         });
     }

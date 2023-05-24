@@ -380,8 +380,8 @@ const Categories = () => {
                                         ></div>
                                     </div>
 
-                                    <Typography variant="h5">"{row.libelle}"****</Typography>
-                                    <Typography variant="body1">"{row.description}"</Typography>
+                                    <Typography variant="h5">{row.libelle}</Typography>
+                                    <Typography variant="body1">{row.description}</Typography>
 
                                     <div>
                                         <ViewIcon>

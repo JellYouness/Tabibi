@@ -60,7 +60,9 @@ class PatientController extends Controller
                 Storage::put('public/'.$filename, $image);
                 $input['image'] = $filename;
         }
+        $input['password'] = bcrypt($request->password);
         $patient =  Patient::create($input);
+        $patient->createToken('AuthByIs-Tech')->accessToken;
 
         return response()->json([
             'message'=> 'Patient created successfully',

@@ -19,4 +19,5 @@ class Categorie extends Model
     public function sous_type(){
         return $this->belongsTo(SousType::class);
     }
+
 }
