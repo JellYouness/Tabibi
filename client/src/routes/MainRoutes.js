@@ -18,6 +18,8 @@ const Urgences = Loadable(lazy(() => import('pages/components/Urgences/Urgences'
 const SousTypes = Loadable(lazy(() => import('pages/components/SousTypes/SousTypes')));
 const Categories = Loadable(lazy(() => import('pages/components/Categories/Categories')));
 const Utilisateurs = Loadable(lazy(() => import('pages/components/Utilisateurs/Utilisateurs')));
+const TraitementsConsulte = Loadable(lazy(() => import('pages/components/Traitements/TraitementsConsulte')));
+const TraitementsNonConsulte = Loadable(lazy(() => import('pages/components/Traitements/TraitementsNonConsulte')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -69,6 +71,14 @@ const MainRoutes = {
         {
             path: 'utilisateurs',
             element: <Utilisateurs />
+        },
+        {
+            path: 'traitements-consulte',
+            element: <TraitementsConsulte />
+        },
+        {
+            path: 'traitements-nonconsulte',
+            element: <TraitementsNonConsulte />
         }
     ]
 };

@@ -21,13 +21,15 @@ import { Add } from '@mui/icons-material';
 
 // third-party
 import NumberFormat from 'react-number-format';
-import { deleteTraitement, editTraitement, fetchTraitements, insertTraitement } from 'store/reducers/traitements/traitementSlice';
+import { fetchTraitementsNonConsulte, fetchTraitements, fetchTraitementsConsulte } from 'store/reducers/traitements/traitementSlice';
 
 // project import
 import Dot from 'components/@extended/Dot';
 import styled from 'styled-components';
 import { useTheme } from '@mui/material/styles';
 import { useDispatch, useSelector } from 'react-redux';
+import MainCard from 'components/MainCard';
+import timeDifference from 'utils/timeDifference';
 
 const EditIcon = styled.a`
     padding: 4px 3px;
@@ -155,15 +157,11 @@ const OrderStatus = ({ status }) => {
     switch (status) {
         case 0:
             color = 'warning';
-            title = 'Pending';
+            title = 'Non Consulté';
             break;
         case 1:
             color = 'success';
-            title = 'Approved';
-            break;
-        case 2:
-            color = 'error';
-            title = 'Rejected';
+            title = 'Consulté';
             break;
         default:
             color = 'primary';
@@ -171,7 +169,7 @@ const OrderStatus = ({ status }) => {
     }
 
     return (
-        <Stack direction="row" spacing={1} alignItems="center">
+        <Stack direction="row" spacing={1} alignItems="center" justifyContent="center">
             <Chip label={title} color={color} />
         </Stack>
     );
@@ -183,11 +181,11 @@ OrderStatus.propTypes = {
 
 // ==============================|| ORDER TABLE ||============================== //
 
-const OrderTable = () => {
+const Consulte = () => {
     const dispatch = useDispatch();
     const { records, loading, error, record } = useSelector((state) => state.traitements);
     useEffect(() => {
-        dispatch(fetchTraitements());
+        dispatch(fetchTraitementsConsulte());
     }, [dispatch]);
     const rows = records;
 
@@ -210,91 +208,93 @@ const OrderTable = () => {
     const isSelected = (trackingNo) => selected.indexOf(trackingNo) !== -1;
 
     return (
-        <Box>
-            <TableContainer
-                sx={{
-                    width: '100%',
-                    overflowX: 'auto',
-                    position: 'relative',
-                    display: 'block',
-                    maxWidth: '100%',
-                    '& td, & th': { whiteSpace: 'nowrap' }
-                }}
-            >
-                <Table
-                    aria-labelledby="tableTitle"
+        <MainCard>
+            <Box>
+                <TableContainer
                     sx={{
-                        '& .MuiTableCell-root:first-child': {
-                            pl: 2
-                        },
-                        '& .MuiTableCell-root:last-child': {
-                            pr: 3
-                        }
+                        width: '100%',
+                        overflowX: 'auto',
+                        position: 'relative',
+                        display: 'block',
+                        maxWidth: '100%',
+                        '& td, & th': { whiteSpace: 'nowrap' }
                     }}
                 >
-                    <OrderTableHead order={order} orderBy={orderBy} />
-                    <TableBody>
-                        {stableSort(rows, getComparator(order, orderBy))
-                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((row, index) => {
-                                const isItemSelected = isSelected(row.trackingNo);
-                                const labelId = `enhanced-table-checkbox-${index}`;
+                    <Table
+                        aria-labelledby="tableTitle"
+                        sx={{
+                            '& .MuiTableCell-root:first-child': {
+                                pl: 2
+                            },
+                            '& .MuiTableCell-root:last-child': {
+                                pr: 3
+                            }
+                        }}
+                    >
+                        <OrderTableHead order={order} orderBy={orderBy} />
+                        <TableBody>
+                            {stableSort(records, getComparator(order, orderBy))
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((row, index) => {
+                                    const isItemSelected = isSelected(row.trackingNo);
+                                    const labelId = `enhanced-table-checkbox-${index}`;
 
-                                return (
-                                    <TableRow
-                                        hover
-                                        role="checkbox"
-                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                        aria-checked={isItemSelected}
-                                        tabIndex={-1}
-                                        key={row.id}
-                                    >
-                                        <TableCell component="th" id={labelId} scope="row" align="left">
-                                            {row.categorie.libelle}
-                                        </TableCell>
-                                        <TableCell align="left">{row.categorie.sous_type.urgence.libelle}</TableCell>
-                                        <TableCell align="left">
-                                            <Stack direction="column" alignItems="flex-start">
-                                                <Typography variant="subtitle1" minWidth="100%">
-                                                    {row.patient.nom} {row.patient.prenom}
-                                                </Typography>
-                                            </Stack>
-                                        </TableCell>
-                                        <TableCell align="left">{row.date}</TableCell>
-                                        <TableCell align="left">
-                                            {row.medecin ? (
+                                    return (
+                                        <TableRow
+                                            hover
+                                            role="checkbox"
+                                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                            aria-checked={isItemSelected}
+                                            tabIndex={-1}
+                                            key={row.id}
+                                        >
+                                            <TableCell component="th" id={labelId} scope="row" align="left">
+                                                {row.categorie.libelle}
+                                            </TableCell>
+                                            <TableCell align="left">{row.categorie.sous_type.urgence.libelle}</TableCell>
+                                            <TableCell align="left">
                                                 <Stack direction="column" alignItems="flex-start">
                                                     <Typography variant="subtitle1" minWidth="100%">
-                                                        {row.medecin.nom} {row.medecin.prenom}
-                                                    </Typography>
-                                                    <Typography variant="subtitle2" color="textSecondary" fontWeight="normal">
-                                                        {row.medecin.specialite.nom}
+                                                        {row.patient.nom} {row.patient.prenom}
                                                     </Typography>
                                                 </Stack>
-                                            ) : (
-                                                <Typography>--------</Typography>
-                                            )}
-                                        </TableCell>
-                                        <TableCell align="center">
-                                            <OrderStatus status={row.etat} />
-                                        </TableCell>
-                                    </TableRow>
-                                );
-                            })}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            <TablePagination
-                rowsPerPageOptions={[5, 10, 20]}
-                component="div"
-                count={rows.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-        </Box>
+                                            </TableCell>
+                                            <TableCell align="left">{row.date}</TableCell>
+                                            <TableCell align="left">
+                                                {row.medecin ? (
+                                                    <Stack direction="column" alignItems="flex-start">
+                                                        <Typography variant="subtitle1" minWidth="100%">
+                                                            {row.medecin.nom} {row.medecin.prenom}
+                                                        </Typography>
+                                                        <Typography variant="subtitle2" color="textSecondary" fontWeight="normal">
+                                                            {row.medecin.specialite.nom}
+                                                        </Typography>
+                                                    </Stack>
+                                                ) : (
+                                                    <Typography>--------</Typography>
+                                                )}
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                <OrderStatus status={row.etat} />
+                                            </TableCell>
+                                        </TableRow>
+                                    );
+                                })}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                <TablePagination
+                    rowsPerPageOptions={[5, 10, 20]}
+                    component="div"
+                    count={rows.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+            </Box>
+        </MainCard>
     );
 };
 
-export default OrderTable;
+export default Consulte;

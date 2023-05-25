@@ -2,21 +2,30 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import authActions from './authActions';
+import axios from 'axios';
+const API = process.env.REACT_APP_API_URL;
 
 // initial state
 const user = JSON.parse(localStorage.getItem('user'));
 const initialState = user
-    ? { user, isLoggedIn: true, isLoading: false, isSuccess: false, message: '' }
-    : { user: null, isLoggedIn: false, isLoading: false, isSuccess: false, message: '' };
+    ? { user, isLoggedIn: true, isLoading: false, isSuccess: false, error: false }
+    : { user: null, isLoggedIn: false, isLoading: false, isSuccess: false, error: false };
 
 // ==============================|| ACTIONS ||============================== //
 
-export const login = createAsyncThunk('login', async (payload, { rejectWithValue }) => {
+export const login = createAsyncThunk('login', async (payload, thunkAPI) => {
+    const { rejectWithValue } = thunkAPI;
     try {
-        return await authActions.login(payload);
+        const response = await axios.post(`${API}/api/login`, payload);
+        console.log(payload);
+        if (response.data.token) {
+            localStorage.setItem('user', JSON.stringify(response.data));
+            localStorage.setItem('token', response.data.token);
+        }
+        return response.data;
     } catch (error) {
         console.log(error);
-        rejectWithValue(error.response);
+        return rejectWithValue(error);
     }
 });
 
@@ -40,6 +49,8 @@ const authSlice = createSlice({
     extraReducers: {
         [login.pending]: (state) => {
             state.isLoading = true;
+            state.isSuccess = false;
+            state.error = false;
         },
         [login.fulfilled]: (state, action) => {
             state.isLoading = false;
@@ -50,7 +61,7 @@ const authSlice = createSlice({
         [login.rejected]: (state) => {
             state.isLoading = false;
             state.isSuccess = false;
-            state.message = 'failed';
+            state.error = true;
         },
 
         [logout.fulfilled]: (state) => {

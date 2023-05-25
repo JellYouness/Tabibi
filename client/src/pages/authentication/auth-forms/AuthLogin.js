@@ -48,19 +48,33 @@ const AuthLogin = () => {
         event.preventDefault();
     };
 
-    const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth);
+    const { isLoggedIn, isLoading, error } = useSelector((state) => state.auth);
+    console.log(isLoggedIn);
 
-    useEffect(() => {
-        if (isError) {
-            console.error(message);
+    // useEffect(() => {
+    //     if (isError) {
+    //         console.error(message);
+    //     }
+
+    //     if (isSuccess) {
+    //         navigate('/');
+    //     }
+
+    //     dispatch(reset());
+    // }, [user, isError, isSuccess, message, navigate, dispatch]);
+
+    const handleLogin = (formValue) => {
+        const { username, password } = formValue;
+        try {
+            dispatch(login({ username, password }));
+            dispatch(clearMessage());
+        } catch (err) {
+            console.log(err);
         }
-
-        if (isSuccess || user) {
-            navigate('/');
-        }
-
-        dispatch(reset());
-    }, [user, isError, isSuccess, message, navigate, dispatch]);
+    };
+    if (isLoggedIn) {
+        navigate('/');
+    }
 
     return (
         <>
@@ -74,18 +88,7 @@ const AuthLogin = () => {
                     username: Yup.string().required('username is required'),
                     password: Yup.string().max(255).required('Password is required')
                 })}
-                onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-                    dispatch(login(values));
-                    // console.log(user);
-                    try {
-                        setStatus({ success: false });
-                        setSubmitting(false);
-                    } catch (err) {
-                        setStatus({ success: false });
-                        setErrors({ submit: err.message });
-                        setSubmitting(false);
-                    }
-                }}
+                onSubmit={handleLogin}
             >
                 {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
                     <form noValidate onSubmit={handleSubmit}>
@@ -166,16 +169,16 @@ const AuthLogin = () => {
                                     </Link>
                                 </Stack>
                             </Grid>
-                            {errors.submit && (
+                            {error && (
                                 <Grid item xs={12}>
-                                    <FormHelperText error>{errors.submit}</FormHelperText>
+                                    <FormHelperText error>Username ou le mot de passe est incorrect</FormHelperText>
                                 </Grid>
                             )}
                             <Grid item xs={12}>
                                 <AnimateButton>
                                     <Button
                                         disableElevation
-                                        disabled={isSubmitting}
+                                        // disabled={isSubmitting}
                                         fullWidth
                                         size="large"
                                         type="submit"

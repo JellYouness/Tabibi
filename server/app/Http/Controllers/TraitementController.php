@@ -4,32 +4,41 @@ namespace App\Http\Controllers;
 
 use App\Models\Traitement;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class TraitementController extends Controller
 {
     public function index(){
-        $traitement = Traitement::all();
-        return response()->json($traitement);
+        $traitements = Traitement::with(['patient','medecin.specialite','categorie.sous_type.urgence'])
+        ->latest()
+        ->get();
+        return response()->json($traitements);
     }
 
     public function index_patient($id){
-        $traitement = Traitement::where('patient_id', $id)->get();
+        $traitement = Traitement::with(['patient','medecin.specialite','categorie.sous_type.urgence'])
+        ->where('patient_id', $id)->get();
         return response()->json($traitement);
     }
 
     public function index_medecin($id){
-        $traitement = Traitement::where('medecin_id', $id)->get();
+       $traitement = Traitement::with(['patient','medecin.specialite','categorie.sous_type.urgence'])
+        ->where('medecin_id', $id)
+        ->get();
         return response()->json($traitement);
     }
 
     public function index_consulte(){
-        $traitement = Traitement::where('etat', 1)->get();
+        $traitement = Traitement::with(['patient','medecin.specialite','categorie.sous_type.urgence'])
+        ->where('etat', 1)
+        ->get();
         return response()->json($traitement);
     }
 
     public function index_nonconsulte(){
-        $traitement = Traitement::where('etat', 0)->get();
+        $traitement = Traitement::with(['patient','categorie.sous_type.urgence'])
+        ->where('etat', 0)->get();
         return response()->json($traitement);
     }
     
@@ -83,12 +92,9 @@ class TraitementController extends Controller
        
         $input = $request->all();
         $validator = Validator::make($input,[
-            'date' => ['required', 'date'],
-             'etat' => ['required', 'boolean'],
-             'description' => ['required', 'string'],
-             'reponse' => ['required', 'string'],
-             'categorie_id' => ['required', 'exists:categories,id'],
-             'patient_id' => ['required', 'exists:patients,id'],
+             'etat' => ['boolean'],
+             'description' => ['string'],
+             'reponse' => ['string'],
              'medecin_id' => ['nullable', 'exists:medecins,id'],
         ]);
 

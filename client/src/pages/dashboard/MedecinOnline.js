@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
 // material-ui
@@ -17,12 +17,15 @@ import {
     TableRow,
     Typography
 } from '@mui/material';
+const API = process.env.REACT_APP_API_URL;
 
 // third-party
 import NumberFormat from 'react-number-format';
+import { fetchMedecinsOnline } from 'store/reducers/medecins/medecinSlice';
 
 // project import
 import Dot from 'components/@extended/Dot';
+import { useDispatch, useSelector } from 'react-redux';
 
 function createData(trackingNo, name, fat, carbs, protein) {
     return { trackingNo, name, fat, carbs, protein };
@@ -136,6 +139,12 @@ OrderStatus.propTypes = {
 // ==============================|| ORDER TABLE ||============================== //
 
 const MedecinOnline = () => {
+    const dispatch = useDispatch();
+    const { records, loading, error, record } = useSelector((state) => state.medecins);
+    useEffect(() => {
+        dispatch(fetchMedecinsOnline());
+    }, [dispatch]);
+    const rows = records;
     const [order] = useState('asc');
     const [orderBy] = useState('trackingNo');
     const [page, setPage] = useState(0);
@@ -177,30 +186,23 @@ const MedecinOnline = () => {
                         {stableSort(rows, getComparator(order, orderBy))
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((row, index) => {
-                                const labelId = `enhanced-table-checkbox-${index}`;
-
                                 return (
-                                    <TableRow
-                                        hover
-                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                        tabIndex={-1}
-                                        key={row.trackingNo}
-                                    >
+                                    <TableRow hover sx={{ '&:last-child td, &:last-child th': { border: 0 } }} tabIndex={-1} key={row.id}>
                                         <TableCell align="left">
                                             <Stack direction="row" spacing={2} alignItems="center">
-                                                <Avatar alt="" src="" height={30} />
+                                                <Avatar alt="" src={`${API}/storage/${row.image}`} height={30} />
                                                 <Stack direction="column">
                                                     <Typography variant="subtitle1" minWidth="100%">
-                                                        {row.name}
+                                                        {row.nom} {row.prenom}
                                                     </Typography>
                                                     <Typography variant="subtitle2" color="textSecondary" fontWeight="normal">
-                                                        {row.protein}
+                                                        {row.specialite}
                                                     </Typography>
                                                 </Stack>
                                             </Stack>
                                         </TableCell>
                                         <TableCell align="right">
-                                            <OrderStatus status={row.carbs} />
+                                            <OrderStatus status={row.online} />
                                         </TableCell>
                                     </TableRow>
                                 );

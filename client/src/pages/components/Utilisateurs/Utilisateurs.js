@@ -318,7 +318,8 @@ const Users = () => {
             values = {
                 id: values.id || null,
                 username: values.username,
-                password: values.password
+                password: values.password,
+                role: values.role
             };
             values.id ? dispatch(editUser(values)) : dispatch(insertUser(values));
             dispatch(fetchUsers());
@@ -460,6 +461,17 @@ const Users = () => {
                                                     value={formik.values.password}
                                                     error={formik.touched.password && formik.errors.password}
                                                     helperText={formik.touched.password && formik.errors.password}
+                                                />
+                                                <TextField
+                                                    id="role"
+                                                    name="role"
+                                                    type="text"
+                                                    placeholder="Enter le role"
+                                                    onChange={formik.handleChange}
+                                                    onBlur={formik.handleBlur}
+                                                    value={formik.values.role}
+                                                    error={formik.touched.role && formik.errors.role}
+                                                    helperText={formik.touched.role && formik.errors.role}
                                                 />
                                             </Stack>
                                         </div>

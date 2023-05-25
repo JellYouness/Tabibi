@@ -18,6 +18,16 @@ class MedecinController extends Controller
         ->get();
         return response()->json($medecin);
     }
+
+    public function index_online(){
+        $medecin = DB::table('medecins')->join('specialites', function ($join){
+            $join->on('specialite_id','=','specialites.id');
+        })
+        ->select('medecins.*','specialites.nom AS specialite')
+        ->where('online', '=','1')
+        ->get();
+        return response()->json($medecin);
+    }
     
     public function show( $id){
         $medecin = Medecin::find($id);

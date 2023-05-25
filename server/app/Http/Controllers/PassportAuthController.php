@@ -10,11 +10,13 @@ class PassportAuthController extends Controller
     public function register(Request $request){
         $this->validate($request,[
             'username' => 'required',
-            'password' => 'required|min:8'
+            'password' => 'required|min:8',
+            'role' => 'required',
         ]);
         $user = User::create([
             'username' => $request->username,
             'password' => bcrypt($request->password),
+            'role' => $request->role
         ]);
         $token =  $user->createToken('AuthByIs-Tech')->accessToken;
         return response()->json(['token'=> $token],200);
@@ -29,7 +31,8 @@ class PassportAuthController extends Controller
             $token =  auth()->user()->createToken('AuthByIs-Tech')->accessToken;
             $id = auth()->user()->id;
             $username =  auth()->user()->username;
-            return response()->json(['id'=>$id,'username'=> $username,'token'=> $token],200);
+            $role =  auth()->user()->role;
+            return response()->json(['id'=>$id,'username'=> $username,'role' => $role,'token'=> $token],200);
         }else{
             return response()->json(['error'=> 'Unauthorised'],401);
         } 

@@ -1,14 +1,14 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const initialState = { records: [], loading: false, error: null, record: null };
+const initialState = { records: [], loading: false, error: null, record: null, edited: false };
 const API = process.env.REACT_APP_API_URL;
-const token = localStorage.getItem('userToken');
+const token = localStorage.getItem('TraitementToken');
 
-export const fetchMedecins = createAsyncThunk('fetchMedecins', async (_, thunkAPI) => {
+export const fetchTraitements = createAsyncThunk('fetchTraitements', async (_, thunkAPI) => {
     const { rejectWithValue } = thunkAPI;
     try {
-        const res = await axios.get(`${API}/api/medecins`, {
+        const res = await axios.get(`${API}/api/traitements`, {
             headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }
         });
         return res.data;
@@ -17,22 +17,10 @@ export const fetchMedecins = createAsyncThunk('fetchMedecins', async (_, thunkAP
     }
 });
 
-export const fetchMedecinsOnline = createAsyncThunk('fetchMedecinsOnline', async (_, thunkAPI) => {
+export const fetchTraitement = createAsyncThunk('fetchTraitement', async (id, thunkAPI) => {
     const { rejectWithValue } = thunkAPI;
     try {
-        const res = await axios.get(`${API}/api/medecinsOnline`, {
-            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }
-        });
-        return res.data;
-    } catch (error) {
-        return rejectWithValue(error.message);
-    }
-});
-
-export const fetchMedecin = createAsyncThunk('fetchMedecin', async (id, thunkAPI) => {
-    const { rejectWithValue } = thunkAPI;
-    try {
-        const res = await fetch(`${API}api/medecins/${id}`);
+        const res = await fetch(`${API}/api/traitements/${id}`);
         const data = await res.json();
         return data;
     } catch (error) {
@@ -40,10 +28,32 @@ export const fetchMedecin = createAsyncThunk('fetchMedecin', async (id, thunkAPI
     }
 });
 
-export const deleteMedecin = createAsyncThunk('deleteMedecin', async (id, thunkAPI) => {
+export const fetchTraitementsConsulte = createAsyncThunk('fetchTraitementsConsulte', async (_, thunkAPI) => {
     const { rejectWithValue } = thunkAPI;
     try {
-        await fetch(`${API}/api/medecins/${id}`, {
+        const res = await fetch(`${API}/api/traitementsConsulte`);
+        const data = await res.json();
+        return data;
+    } catch (error) {
+        return rejectWithValue(error.message);
+    }
+});
+
+export const fetchTraitementsNonConsulte = createAsyncThunk('fetchTraitementsNonConsulte', async (_, thunkAPI) => {
+    const { rejectWithValue } = thunkAPI;
+    try {
+        const res = await fetch(`${API}/api/traitementsNonConsulte`);
+        const data = await res.json();
+        return data;
+    } catch (error) {
+        return rejectWithValue(error.message);
+    }
+});
+
+export const deleteTraitement = createAsyncThunk('deleteTraitement', async (id, thunkAPI) => {
+    const { rejectWithValue } = thunkAPI;
+    try {
+        await fetch(`${API}/api/traitements/${id}`, {
             method: 'DELETE'
         });
         return id;
@@ -52,26 +62,17 @@ export const deleteMedecin = createAsyncThunk('deleteMedecin', async (id, thunkA
     }
 });
 
-export const insertMedecin = createAsyncThunk('insertMedecin', async (item, thunkAPI) => {
+export const insertTraitement = createAsyncThunk('insertTraitement', async (item, thunkAPI) => {
     const { rejectWithValue } = thunkAPI;
     // const { auth } = getState();
-    // item.userId = auth.id;
+    // item.TraitementId = auth.id;
 
     try {
         const res = await axios.post(
-            `${API}/api/medecins`,
+            `${API}/api/traitements`,
             {
-                nom: item.nom,
-                prenom: item.prenom,
-                email: item.email,
-                cin: item.cin,
-                telephone: item.telephone,
-                naissance: item.naissance,
-                civilité: item.civilité,
-                specialite_id: item.specialite_id,
-                adresse: item.adresse,
-                password: item.password,
-                image: item.image
+                Traitementname: item.Traitementname,
+                password: item.password
             },
             {
                 body: JSON.stringify(item),
@@ -89,10 +90,10 @@ export const insertMedecin = createAsyncThunk('insertMedecin', async (item, thun
     }
 });
 
-export const editMedecin = createAsyncThunk('editMedecin', async (item, thunkAPI) => {
+export const editTraitement = createAsyncThunk('editTraitement', async (item, thunkAPI) => {
     const { rejectWithValue } = thunkAPI;
     try {
-        const res = await fetch(`${API}/api/medecins/${item.id}`, {
+        const res = await fetch(`${API}/api/traitements/${item.id}`, {
             method: 'PATCH',
             body: JSON.stringify(item),
             headers: {
@@ -107,8 +108,8 @@ export const editMedecin = createAsyncThunk('editMedecin', async (item, thunkAPI
     }
 });
 
-const medecinSlice = createSlice({
-    name: 'medecins',
+const traitementSlice = createSlice({
+    name: 'traitements',
     initialState,
     reducers: {
         cleanRecord: (state) => {
@@ -117,86 +118,102 @@ const medecinSlice = createSlice({
     },
 
     extraReducers: {
-        //get one user post
-        [fetchMedecin.pending]: (state) => {
+        //get one Traitement post
+        [fetchTraitement.pending]: (state) => {
             state.loading = true;
             state.error = null;
         },
-        [fetchMedecin.fulfilled]: (state, action) => {
+        [fetchTraitement.fulfilled]: (state, action) => {
             state.loading = false;
             state.record = action.payload;
         },
-        [fetchMedecin.rejected]: (state, action) => {
+        [fetchTraitement.rejected]: (state, action) => {
             state.loading = false;
             state.error = action.payload;
         },
-        //fetch users
-        [fetchMedecins.pending]: (state) => {
+        //fetch Traitements
+        [fetchTraitements.pending]: (state) => {
             state.loading = true;
             state.error = null;
         },
-        [fetchMedecins.fulfilled]: (state, action) => {
+        [fetchTraitements.fulfilled]: (state, action) => {
             state.loading = false;
             state.records = action.payload;
         },
-        [fetchMedecins.rejected]: (state, action) => {
+        [fetchTraitements.rejected]: (state, action) => {
             state.loading = false;
             state.error = action.payload;
         },
-        //fetch users online
-        [fetchMedecinsOnline.pending]: (state) => {
+        //fetch Traitements Consulte
+        [fetchTraitementsConsulte.pending]: (state) => {
             state.loading = true;
             state.error = null;
         },
-        [fetchMedecinsOnline.fulfilled]: (state, action) => {
+        [fetchTraitementsConsulte.fulfilled]: (state, action) => {
             state.loading = false;
             state.records = action.payload;
         },
-        [fetchMedecinsOnline.rejected]: (state, action) => {
+        [fetchTraitementsConsulte.rejected]: (state, action) => {
             state.loading = false;
             state.error = action.payload;
         },
-        //create user
-        [insertMedecin.pending]: (state) => {
+        //fetch Traitements Non Consulte
+        [fetchTraitementsNonConsulte.pending]: (state) => {
             state.loading = true;
             state.error = null;
         },
-        [insertMedecin.fulfilled]: (state, action) => {
+        [fetchTraitementsNonConsulte.fulfilled]: (state, action) => {
+            state.loading = false;
+            state.records = action.payload;
+        },
+        [fetchTraitementsNonConsulte.rejected]: (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        },
+        //create Traitement
+        [insertTraitement.pending]: (state) => {
+            state.loading = true;
+            state.error = null;
+        },
+        [insertTraitement.fulfilled]: (state, action) => {
             state.loading = false;
             state.records.push(action.payload);
         },
-        [insertMedecin.rejected]: (state, action) => {
+        [insertTraitement.rejected]: (state, action) => {
             state.loading = false;
             state.error = action.payload;
         },
-        //delete user
-        [deleteMedecin.pending]: (state) => {
+        //delete Traitement
+        [deleteTraitement.pending]: (state) => {
             state.loading = true;
             state.error = null;
         },
-        [deleteMedecin.fulfilled]: (state, action) => {
+        [deleteTraitement.fulfilled]: (state, action) => {
             state.loading = false;
             state.records = state.records.filter((el) => el.id !== action.payload);
         },
-        [deleteMedecin.rejected]: (state, action) => {
+        [deleteTraitement.rejected]: (state, action) => {
             state.loading = false;
             state.error = action.payload;
         },
 
-        //edit user
-        [editMedecin.pending]: (state) => {
+        //edit Traitement
+        [editTraitement.pending]: (state) => {
             state.loading = true;
+            state.edited = false;
             state.error = null;
         },
-        [editMedecin.fulfilled]: (state, action) => {
+        [editTraitement.fulfilled]: (state, action) => {
             state.loading = false;
+            state.edited = true;
             state.record = action.payload;
         },
-        [editMedecin.rejected]: (state, action) => {
+        [editTraitement.rejected]: (state, action) => {
             state.loading = false;
+            state.edited = false;
             state.error = action.payload;
         }
     }
 });
 
-export default medecinSlice.reducer;
+export default traitementSlice.reducer;

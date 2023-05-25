@@ -19,5 +19,7 @@ class Categorie extends Model
     public function sous_type(){
         return $this->belongsTo(SousType::class);
     }
-
+public function traitement(){
+        return $this->hasMany(Traitement::class);
+    }
 }

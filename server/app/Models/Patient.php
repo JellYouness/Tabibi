@@ -27,5 +27,7 @@ class Patient extends Model
         'remember_token',
     ];
 
-
+public function traitement(){
+        return $this->hasMany(Traitement::class);
+    }
 }

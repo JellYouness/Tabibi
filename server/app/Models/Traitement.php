@@ -20,12 +20,12 @@ class Traitement extends Model
     ];
 
     public function categorie(){
-        return $this->hasMany(Categorie::class);
+        return $this->belongsTo(Categorie::class);
     }
     public function patient(){
-        return $this->hasMany(Patient::class);
+        return $this->belongsTo(Patient::class);
     }
     public function medecin(){
-        return $this->hasMany(Medecin::class);
+        return $this->belongsTo(Medecin::class);
     }
 }

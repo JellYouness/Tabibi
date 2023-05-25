@@ -33,11 +33,13 @@ class UserController extends Controller
     public function store(Request $request){
         $this->validate($request,[
             'username' => 'required',
-            'password' => 'required|min:8'
+            'password' => 'required|min:8',
+            'role' => 'required',
         ]);
         $user = User::create([
             'username' => $request->username,
             'password' => bcrypt($request->password),
+            'role' => $request->role
         ]);
         $user->createToken('AuthByIs-Tech')->accessToken;
 
