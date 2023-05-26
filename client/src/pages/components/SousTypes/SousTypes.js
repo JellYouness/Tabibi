@@ -28,7 +28,7 @@ import '../style.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteSousType, editSousType, fetchSousTypes, insertSousType } from 'store/reducers/soustypes/soustypeSlice';
 import { useEffect } from 'react';
-import { useLocation } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 const API = process.env.REACT_APP_API_URL;
 
@@ -70,6 +70,8 @@ const Red = {
 };
 
 const SousTypes = () => {
+    const navigate = useNavigate();
+    JSON.parse(localStorage.getItem('user')).role !== 'prestataire' ? null : navigate('/404');
     let { state } = useLocation();
     const dispatch = useDispatch();
     const { records, loading, error, record } = useSelector((state) => state.soustypes);

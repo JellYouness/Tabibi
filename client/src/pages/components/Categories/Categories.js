@@ -29,7 +29,7 @@ import '../style.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteCategorie, editCategorie, fetchCategories, insertCategorie } from 'store/reducers/categories/categorieSlice';
 import { useEffect } from 'react';
-import { useLocation } from 'react-router';
+import { Navigate, useLocation, useNavigate } from 'react-router';
 const API = process.env.REACT_APP_API_URL;
 
 const DeleteIcon = styled.a`
@@ -68,8 +68,10 @@ const Red = {
     color: '#ed4337',
     margin: '0 0 0.2rem 0.2rem'
 };
-
 const Categories = () => {
+    const navigate = useNavigate();
+    JSON.parse(localStorage.getItem('user')).role !== 'prestataire' ? null : navigate('/404');
+
     let { state } = useLocation();
     const dispatch = useDispatch();
     const { records, loading, error, record } = useSelector((state) => state.categories);

@@ -28,7 +28,7 @@ import '../style.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteUrgence, editUrgence, fetchUrgences, insertUrgence } from 'store/reducers/urgences/urgenceSlice';
 import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 const API = process.env.REACT_APP_API_URL;
 
 const DeleteIcon = styled.a`
@@ -69,6 +69,8 @@ const Red = {
 };
 
 const Urgences = () => {
+    const navigate = useNavigate();
+    JSON.parse(localStorage.getItem('user')).role !== 'prestataire' ? null : navigate('/404');
     const dispatch = useDispatch();
     const { records, loading, error, record } = useSelector((state) => state.urgences);
     useEffect(() => {

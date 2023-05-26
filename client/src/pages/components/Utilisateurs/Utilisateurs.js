@@ -34,7 +34,9 @@ import {
     FormControlLabel,
     TableSortLabel,
     Chip,
-    CircularProgress
+    CircularProgress,
+    Select,
+    MenuItem
 } from '@mui/material';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -48,6 +50,7 @@ import '../style.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteUser, editUser, fetchUsers, insertUser } from 'store/reducers/users/userSlice';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router';
 const API = process.env.REACT_APP_API_URL;
 
 const DeleteIcon = styled.a`
@@ -217,6 +220,8 @@ OrderStatus.propTypes = {
 
 // console.log('rows', rows);
 const Users = () => {
+    const navigate = useNavigate();
+    JSON.parse(localStorage.getItem('user')).role === 'super' ? null : navigate('/404');
     const dispatch = useDispatch();
     const { records, loading, error, record } = useSelector((state) => state.users);
     useEffect(() => {
@@ -462,17 +467,26 @@ const Users = () => {
                                                     error={formik.touched.password && formik.errors.password}
                                                     helperText={formik.touched.password && formik.errors.password}
                                                 />
-                                                <TextField
+                                                <FormLabel style={{ marginBottom: '0.2rem', color: theme.palette.secondary.darker }}>
+                                                    Permission:
+                                                </FormLabel>
+                                                <Select
                                                     id="role"
                                                     name="role"
                                                     type="text"
                                                     placeholder="Enter le role"
                                                     onChange={formik.handleChange}
+                                                    value={formik.values.role ? formik.values.role : 'disabled'}
                                                     onBlur={formik.handleBlur}
-                                                    value={formik.values.role}
-                                                    error={formik.touched.role && formik.errors.role}
-                                                    helperText={formik.touched.role && formik.errors.role}
-                                                />
+                                                    inputProps={{ 'aria-label': 'Without label' }}
+                                                >
+                                                    <MenuItem disabled value="disabled">
+                                                        <em>Selectionner le medecin</em>
+                                                    </MenuItem>
+                                                    <MenuItem value="admin">admin</MenuItem>
+                                                    <MenuItem value="prestataire">prestataire</MenuItem>
+                                                    <MenuItem value="super">SuperAdmin</MenuItem>
+                                                </Select>
                                             </Stack>
                                         </div>
                                     </Stack>

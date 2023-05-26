@@ -48,6 +48,7 @@ import '../style.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteSpecialite, editSpecialite, fetchSpecialites, insertSpecialite } from 'store/reducers/specialites/specialiteSlice';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router';
 const API = process.env.REACT_APP_API_URL;
 
 const DeleteIcon = styled.a`
@@ -217,6 +218,8 @@ OrderStatus.propTypes = {
 
 // console.log('rows', rows);
 const Specialites = () => {
+    const navigate = useNavigate();
+    JSON.parse(localStorage.getItem('user')).role !== 'prestataire' ? null : navigate('/404');
     const dispatch = useDispatch();
     const { records, loading, error, record } = useSelector((state) => state.specialites);
     useEffect(() => {

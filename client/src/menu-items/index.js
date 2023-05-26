@@ -1,27 +1,24 @@
 // project import
-import pages from './pages';
 import dashboard from './dashboard';
 import utilities from './utilities';
-import support from './support';
 import traitement from './traitements';
-// const user = JSON.parse(localStorage.getItem('user'));
-// let roots;
-// switch (user.role) {
-//     case 'prestataire':
-//         roots = [dashboard, traitement];
-//         break;
-//     case 'admin':
-//         roots = [utilities];
-//         break;
-//     case 'super':
-//         roots = [dashboard, traitement, utilities];
-//         break;
-// }
+import users from './users';
+
+const roleRoots = (role) => {
+    switch (role) {
+        case 'prestataire':
+            return [dashboard, traitement];
+        case 'admin':
+            return [utilities];
+        default:
+            return [dashboard, traitement, users, utilities];
+    }
+};
 
 // ==============================|| MENU ITEMS ||============================== //
 
-const menuItems = {
-    items: [dashboard, traitement, utilities]
+const menuItems = (role) => {
+    return roleRoots(role);
 };
 
 export default menuItems;

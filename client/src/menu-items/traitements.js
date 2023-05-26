@@ -11,7 +11,7 @@ const icons = {
 
 const traitement = {
     id: 'group-traitement',
-    title: 'Traitements',
+    title: 'Consultations',
     type: 'group',
     children: [
         {
@@ -27,6 +27,22 @@ const traitement = {
             title: 'Non Consultés',
             type: 'item',
             url: '/traitements-nonconsulte',
+            icon: icons.PendingActionsOutlined,
+            breadcrumbs: true
+        },
+        {
+            id: 'TraitementsMed',
+            title: 'Cons. par Medecin',
+            type: 'item',
+            url: '/traitements-medecin',
+            icon: icons.PendingActionsOutlined,
+            breadcrumbs: true
+        },
+        {
+            id: 'TraitementsPat',
+            title: 'Cons. par Patient',
+            type: 'item',
+            url: '/traitements-patient',
             icon: icons.PendingActionsOutlined,
             breadcrumbs: true
         }

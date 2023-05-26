@@ -49,7 +49,6 @@ const AuthLogin = () => {
     };
 
     const { isLoggedIn, isLoading, error } = useSelector((state) => state.auth);
-    console.log(isLoggedIn);
 
     // useEffect(() => {
     //     if (isError) {
@@ -67,7 +66,7 @@ const AuthLogin = () => {
         const { username, password } = formValue;
         try {
             dispatch(login({ username, password }));
-            dispatch(clearMessage());
+            // dispatch(clearMessage());
         } catch (err) {
             console.log(err);
         }

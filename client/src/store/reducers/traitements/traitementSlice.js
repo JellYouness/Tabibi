@@ -28,6 +28,28 @@ export const fetchTraitement = createAsyncThunk('fetchTraitement', async (id, th
     }
 });
 
+export const fetchTraitementsMedecin = createAsyncThunk('fetchTraitementMedecin', async (id, thunkAPI) => {
+    const { rejectWithValue } = thunkAPI;
+    try {
+        const res = await fetch(`${API}/api/traitements/medecins/${id}`);
+        const data = await res.json();
+        return data;
+    } catch (error) {
+        return rejectWithValue(error.message);
+    }
+});
+
+export const fetchTraitementsPatient = createAsyncThunk('fetchTraitement', async (id, thunkAPI) => {
+    const { rejectWithValue } = thunkAPI;
+    try {
+        const res = await fetch(`${API}/api/traitements/patients/${id}`);
+        const data = await res.json();
+        return data;
+    } catch (error) {
+        return rejectWithValue(error.message);
+    }
+});
+
 export const fetchTraitementsConsulte = createAsyncThunk('fetchTraitementsConsulte', async (_, thunkAPI) => {
     const { rejectWithValue } = thunkAPI;
     try {
@@ -70,10 +92,7 @@ export const insertTraitement = createAsyncThunk('insertTraitement', async (item
     try {
         const res = await axios.post(
             `${API}/api/traitements`,
-            {
-                Traitementname: item.Traitementname,
-                password: item.password
-            },
+            {},
             {
                 body: JSON.stringify(item),
                 headers: {
@@ -141,6 +160,32 @@ const traitementSlice = createSlice({
             state.records = action.payload;
         },
         [fetchTraitements.rejected]: (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        },
+        //fetch Traitements Medecin
+        [fetchTraitementsMedecin.pending]: (state) => {
+            state.loading = true;
+            state.error = null;
+        },
+        [fetchTraitementsMedecin.fulfilled]: (state, action) => {
+            state.loading = false;
+            state.records = action.payload;
+        },
+        [fetchTraitementsMedecin.rejected]: (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        },
+        //fetch Traitements Patient
+        [fetchTraitementsPatient.pending]: (state) => {
+            state.loading = true;
+            state.error = null;
+        },
+        [fetchTraitementsPatient.fulfilled]: (state, action) => {
+            state.loading = false;
+            state.records = action.payload;
+        },
+        [fetchTraitementsPatient.rejected]: (state, action) => {
             state.loading = false;
             state.error = action.payload;
         },

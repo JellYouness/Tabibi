@@ -2,6 +2,11 @@
     margin: 0.2rem;
 }
 
+a{
+    text-decoration:none;
+    color:inherit;
+}
+
 .form{
     display: inline-flex;
     -webkit-flex-direction: column;

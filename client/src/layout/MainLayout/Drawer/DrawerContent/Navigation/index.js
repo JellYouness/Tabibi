@@ -4,11 +4,14 @@ import { Box, Typography } from '@mui/material';
 // project import
 import NavGroup from './NavGroup';
 import menuItem from 'menu-items';
+import { useMemo } from 'react';
 
 // ==============================|| DRAWER CONTENT - NAVIGATION ||============================== //
-
 const Navigation = () => {
-    const navGroups = menuItem.items.map((item) => {
+    const userRole = useMemo(() => {
+        return JSON.parse(localStorage.getItem('user')).role;
+    }, [localStorage.getItem('user')]);
+    const navGroups = menuItem(userRole).map((item) => {
         switch (item.type) {
             case 'group':
                 return <NavGroup key={item.id} item={item} />;

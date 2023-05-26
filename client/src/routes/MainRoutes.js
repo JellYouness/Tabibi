@@ -7,9 +7,6 @@ import MainLayout from 'layout/MainLayout';
 // render - dashboard
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
 
-// render - sample page
-const SamplePage = Loadable(lazy(() => import('pages/extra-pages/SamplePage')));
-
 // render - utilities
 const Patients = Loadable(lazy(() => import('pages/components/Patients/Patients')));
 const Specialites = Loadable(lazy(() => import('pages/components/Specialites/Specialites')));
@@ -20,19 +17,23 @@ const Categories = Loadable(lazy(() => import('pages/components/Categories/Categ
 const Utilisateurs = Loadable(lazy(() => import('pages/components/Utilisateurs/Utilisateurs')));
 const TraitementsConsulte = Loadable(lazy(() => import('pages/components/Traitements/TraitementsConsulte')));
 const TraitementsNonConsulte = Loadable(lazy(() => import('pages/components/Traitements/TraitementsNonConsulte')));
+const TraitementsMedecin = Loadable(lazy(() => import('pages/components/Traitements/TraitementsMedecin')));
+const TraitementsPatient = Loadable(lazy(() => import('pages/components/Traitements/TraitementsPatient')));
+const Page404 = Loadable(lazy(() => import('pages/components/404')));
+const Home = Loadable(lazy(() => import('pages/components/Home')));
 
 // ==============================|| MAIN ROUTING ||============================== //
-
 const MainRoutes = {
     path: '/',
     element: <MainLayout />,
     children: [
         {
             path: '/',
-            element: <DashboardDefault />
+            element: <Home />
         },
         {
             path: 'dashboard',
+            element: <DashboardDefault />,
             children: [
                 {
                     path: 'default',
@@ -41,8 +42,20 @@ const MainRoutes = {
             ]
         },
         {
-            path: 'sample-page',
-            element: <SamplePage />
+            path: 'traitements-consulte',
+            element: <TraitementsConsulte />
+        },
+        {
+            path: 'traitements-nonconsulte',
+            element: <TraitementsNonConsulte />
+        },
+        {
+            path: 'traitements-medecin',
+            element: <TraitementsMedecin />
+        },
+        {
+            path: 'traitements-patient',
+            element: <TraitementsPatient />
         },
         {
             path: 'patients',
@@ -73,12 +86,8 @@ const MainRoutes = {
             element: <Utilisateurs />
         },
         {
-            path: 'traitements-consulte',
-            element: <TraitementsConsulte />
-        },
-        {
-            path: 'traitements-nonconsulte',
-            element: <TraitementsNonConsulte />
+            path: '404',
+            element: <Page404 />
         }
     ]
 };

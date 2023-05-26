@@ -17,7 +17,6 @@ export const login = createAsyncThunk('login', async (payload, thunkAPI) => {
     const { rejectWithValue } = thunkAPI;
     try {
         const response = await axios.post(`${API}/api/login`, payload);
-        console.log(payload);
         if (response.data.token) {
             localStorage.setItem('user', JSON.stringify(response.data));
             localStorage.setItem('token', response.data.token);

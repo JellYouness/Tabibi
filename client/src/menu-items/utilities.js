@@ -1,18 +1,11 @@
 // assets
-import {
-    MedicalServicesOutlined,
-    MonitorHeartOutlined,
-    MasksOutlined,
-    ManageAccountsOutlined,
-    MedicalInformationOutlined
-} from '@mui/icons-material';
+import { MedicalServicesOutlined, MonitorHeartOutlined, MasksOutlined, MedicalInformationOutlined } from '@mui/icons-material';
 
 // icons
 const icons = {
     MasksOutlined,
     MonitorHeartOutlined,
     MedicalServicesOutlined,
-    ManageAccountsOutlined,
     MedicalInformationOutlined
 };
 
@@ -20,7 +13,7 @@ const icons = {
 
 const utilities = {
     id: 'utilities',
-    title: 'Utilities',
+    title: 'Administartion Tabibi',
     type: 'group',
     children: [
         {
@@ -50,13 +43,6 @@ const utilities = {
             type: 'item',
             url: '/urgences',
             icon: icons.MedicalServicesOutlined
-        },
-        {
-            id: 'util-utilisateurs',
-            title: 'Utilisateurs',
-            type: 'item',
-            url: '/utilisateurs',
-            icon: icons.ManageAccountsOutlined
         },
         {
             id: 'util-soustypes',

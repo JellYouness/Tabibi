@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 // material-ui
 import {
@@ -29,7 +29,7 @@ import styled from 'styled-components';
 import { useTheme } from '@mui/material/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import MainCard from 'components/MainCard';
-import timeDifference from 'utils/timeDifference';
+import '../style.css';
 
 const EditIcon = styled.a`
     padding: 4px 3px;
@@ -182,6 +182,8 @@ OrderStatus.propTypes = {
 // ==============================|| ORDER TABLE ||============================== //
 
 const Consulte = () => {
+    const navigate = useNavigate();
+    JSON.parse(localStorage.getItem('user')).role !== 'admin' ? null : navigate('/404');
     const dispatch = useDispatch();
     const { records, loading, error, record } = useSelector((state) => state.traitements);
     useEffect(() => {
@@ -254,16 +256,36 @@ const Consulte = () => {
                                             <TableCell align="left">{row.categorie.sous_type.urgence.libelle}</TableCell>
                                             <TableCell align="left">
                                                 <Stack direction="column" alignItems="flex-start">
-                                                    <Typography variant="subtitle1" minWidth="100%">
+                                                    {/* <RouterLink
+                                                        to="/traitements-patient"
+                                                        state={{ patient: row.patient.id }}
+                                                        alignSelf="end"
+                                                        alignItems="center"
+                                                        sx={{ display: 'flex', textDecoration: 'none' }}
+                                                    > */}
+                                                    <Typography
+                                                        component={RouterLink}
+                                                        to="/traitements-patient"
+                                                        state={{ patient: row.patient.id }}
+                                                        variant="subtitle1"
+                                                        minWidth="100%"
+                                                    >
                                                         {row.patient.nom} {row.patient.prenom}
                                                     </Typography>
+                                                    {/* </RouterLink> */}
                                                 </Stack>
                                             </TableCell>
                                             <TableCell align="left">{row.date}</TableCell>
                                             <TableCell align="left">
                                                 {row.medecin ? (
                                                     <Stack direction="column" alignItems="flex-start">
-                                                        <Typography variant="subtitle1" minWidth="100%">
+                                                        <Typography
+                                                            component={RouterLink}
+                                                            to="/traitements-medecin"
+                                                            state={{ medecin: row.medecin.id }}
+                                                            variant="subtitle1"
+                                                            minWidth="100%"
+                                                        >
                                                             {row.medecin.nom} {row.medecin.prenom}
                                                         </Typography>
                                                         <Typography variant="subtitle2" color="textSecondary" fontWeight="normal">

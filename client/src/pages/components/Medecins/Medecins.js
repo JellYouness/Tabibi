@@ -51,6 +51,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { deleteMedecin, editMedecin, fetchMedecins, insertMedecin } from 'store/reducers/medecins/medecinSlice';
 import { useEffect } from 'react';
 import { fetchSpecialites } from 'store/reducers/specialites/specialiteSlice';
+import { useNavigate } from 'react-router';
 const API = process.env.REACT_APP_API_URL;
 
 const DeleteIcon = styled.a`
@@ -240,6 +241,8 @@ OrderStatus.propTypes = {
 
 // console.log('rows', rows);
 const Medecins = () => {
+    const navigate = useNavigate();
+    JSON.parse(localStorage.getItem('user')).role !== 'prestataire' ? null : navigate('/404');
     const dispatch = useDispatch();
     const { records, loading, error, record } = useSelector((state) => state.medecins);
     const { records: specialites } = useSelector((state) => state.specialites);
