@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Traitement;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class TraitementController extends Controller
@@ -65,7 +64,6 @@ class TraitementController extends Controller
             ]);
     }
 
-    
     public function store(Request $request){
         $input = $request->all();
         $validator = Validator::make($input,[
@@ -94,7 +92,6 @@ class TraitementController extends Controller
             ]);
     }
 
-
     public function update(Request $request, Traitement $traitement){
        
         $input = $request->all();
@@ -122,7 +119,6 @@ class TraitementController extends Controller
             'data'=> $traitement
             ]);
     }
-
 
     public function destroy(Traitement $traitement){
         

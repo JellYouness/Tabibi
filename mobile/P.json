@@ -1,0 +1,61 @@
+// {
+//   "categorie": {
+//     "created_at": null,
+//     "description": "desclcl",
+//     "id": 1,
+//     "image": null,
+//     "libelle": "CAT-1-1",
+//     "sous_type": {
+//       "created_at": null,
+//       "description": "passive network observers, or your employer (if you're using a work machine or network). ",
+//       "id": 1,
+//       "image": null,
+//       "libelle": "Sous-1-1",
+//       "updated_at": null,
+//       "urgence": "ij",
+//       "urgence_id": 2
+//     },
+//     "sous_type_id": 1,
+//     "updated_at": null
+//   },
+//   "categorie_id": 1,
+//   "created_at": null,
+//   "date": "2023-05-26 19:58:48",
+//   "description": "passive network observers, or your employer (if you're using a work machine or network). ",
+//   "etat": 0,
+//   "id": 1,
+//   "medecin": {
+//     "adresse": "gd",
+//     "cin": "GLG",
+//     "civilité": "male",
+//     "created_at": null,
+//     "email": "EMAIL@kfdk",
+//     "id": 1,
+//     "image": null,
+//     "naissance": "0000-00-00",
+//     "nom": "1",
+//     "online": 0,
+//     "prenom": "LLL",
+//     "specialite": {
+//       "created_at": null,
+//       "id": 1,
+//       "nom": "Brave never remembers",
+//       "updated_at": null
+//     },
+//     "specialite_id": 1,
+//     "telephone": 9999,
+//     "updated_at": null
+//   },
+//   "medecin_id": 1,
+//   "patient": null,
+//   "patient_id": 2,
+//   "reponse": null,
+//   "updated_at": null
+// }
+
+
+{"config": {"adapter": ["xhr", "http"], "data": undefined, "env": {"Blob": [Function Blob], "FormData": [Function FormData]}, "headers": [Object], "maxBodyLength": -1, "maxContentLength": -1, "method": "get", "timeout": 0, "transformRequest": [[Function transformRequest]], "transformResponse": [[Function transformResponse]], "transitional": {"clarifyTimeoutError": false, "forcedJSONParsing": true, "silentJSONParsing": true}, "url": "http://192.168.1.5:8000/api/traitements", "validateStatus": [Function validateStatus], "xsrfCookieName": "XSRF-TOKEN", "xsrfHeaderName": "X-XSRF-TOKEN"}, "data": [{"categorie": [Object], 
+"categorie_id": 1, "created_at": null, "date": "2023-05-26 19:58:48", "description": "passive network observers, or your employer (if you're using a work machine or network). ", "etat": 0, "id": 1, "medecin": [Object], "medecin_id": 1, "patient": null, "patient_id": 2, 
+"reponse": null, "updated_at": null}], "headers": {"access-control-allow-origin": "*", "cache-control": "no-cache, private", "connection": "close", "content-type": "application/json", "date": "Sat, 27 May 2023 00:39:56 GMT, Sat, 27 May 2023 00:39:56 GMT", "host": "192.168.1.5:8000", "x-powered-by": "PHP/8.1.18", "x-ratelimit-limit": "60", "x-ratelimit-remaining": "58"}, "request": {"DONE": 4, "HEADERS_RECEIVED": 2, "LOADING": 3, "OPENED": 1, "UNSENT": 0, "_aborted": false, "_cachedResponse": undefined, "_hasError": false, "_headers": 
+{"accept": "application/json, text/plain, */*"}, "_incrementalEvents": false, "_lowerCaseResponseHeaders": {"access-control-allow-origin": "*", "cache-control": "no-cache, private", "connection": "close", "content-type": "application/json", "date": "Sat, 27 May 2023 00:39:56 GMT, Sat, 27 May 2023 00:39:56 GMT", "host": "192.168.1.5:8000", "x-powered-by": "PHP/8.1.18", "x-ratelimit-limit": "60", "x-ratelimit-remaining": "58"}, "_method": "GET", "_perfKey": "network_XMLHttpRequest_http://192.168.1.5:8000/api/traitements", "_performanceLogger": {"_closed": false, "_extras": [Object], "_pointExtras": [Object], "_points": [Object], "_timespans": [Object]}, "_requestId": null, "_response": "[{\"id\":1,\"date\":\"2023-05-26 19:58:48\",\"etat\":0,\"description\":\"passive network observers, or your employer (if you're using a work machine or network). \",\"reponse\":null,\"categorie_id\":1,\"patient_id\":2,\"medecin_id\":1,\"created_at\":null,\"updated_at\":null,\"patient\":null,\"medecin\":{\"id\":1,\"nom\":\"1\",\"prenom\":\"LLL\",\"cin\":\"GLG\",\"email\":\"EMAIL@kfdk\",\"telephone\":9999,\"naissance\":\"0000-00-00\",\"civilit\\u00e9\":\"male\",\"adresse\":\"gd\",\"image\":null,\"online\":0,\"specialite_id\":1,\"created_at\":null,\"updated_at\":null,\"specialite\":{\"id\":1,\"nom\":\"Brave never remembers\",\"created_at\":null,\"updated_at\":null}},\"categorie\":{\"id\":1,\"libelle\":\"CAT-1-1\",\"description\":\"desclcl\",\"image\":null,\"sous_type_id\":1,\"created_at\":null,\"updated_at\":null,\"sous_type\":{\"id\":1,\"libelle\":\"Sous-1-1\",\"description\":\"passive network observers, or your employer (if you're using a work machine or network). \",\"image\":null,\"urgence_id\":2,\"created_at\":null,\"updated_at\":null,\"urgence\":{\"id\":2,\"libelle\":\"22\",\"description\":\"11\",\"image\":null,\"created_at\":null,\"updated_at\":null}}}}]", "_responseType": 
+"", "_sent": true, "_subscriptions": [], "_timedOut": false, "_trackingName": "unknown", "_url": "http://192.168.1.5:8000/api/traitements", "readyState": 4, "responseHeaders": {"Access-Control-Allow-Origin": "*", "Cache-Control": "no-cache, private", "Connection": "close", "Content-Type": "application/json", "Date": "Sat, 27 May 2023 00:39:56 GMT, Sat, 27 May 2023 00:39:56 GMT", "Host": "192.168.1.5:8000", "X-Powered-By": "PHP/8.1.18", "X-RateLimit-Limit": "60", "X-RateLimit-Remaining": "58"}, "responseURL": "http://192.168.1.5:8000/api/traitements", "status": 200, "timeout": 0, "upload": {}, "withCredentials": true}, "status": 200, "statusText": undefined}

@@ -1,0 +1,1 @@
+{"version":3,"file":"Screens.d.ts","sourceRoot":"","sources":["../../../../src/views/Screens.tsx"],"names":[],"mappings":"AAAA,OAAO,KAAK,KAAK,MAAM,OAAO,CAAC;AAC/B,OAAO,EAAE,QAAQ,EAAQ,SAAS,EAAE,MAAM,cAAc,CAAC;AAUzD,eAAO,MAAM,oBAAoB;aAItB,OAAO;cACN,MAAM,SAAS;iBAO1B,CAAC;AAEF,eAAO,MAAM,WAAW;aAKb,OAAO;YACR,CAAC,GAAG,CAAC,GAAG,SAAS,qBAAqB;cACpC,MAAM,SAAS;;iBAU1B,CAAC"}
