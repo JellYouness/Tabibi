@@ -18,7 +18,6 @@ return new class extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->string('libelle');
-            $table->string('description');
             $table->text('description');
             // TODO:Need to change
             $table->string('image')->nullable();

@@ -34,13 +34,13 @@ class MedecinController extends Controller
 
     public function show($id)
     {
-        $medecin = Medecin::find($id);
+        // $medecin = Medecin::find($id);
         // TODO:NEED 
-        // $medecin = DB::table('medecins')
-        //     ->join('specialites', 'medecins.specialite_id', '=', 'specialites.id')
-        //     ->select('medecins.*', 'specialites.nom AS specialite')
-        //     ->where('medecins.id', $id)
-        //     ->first();
+        $medecin = DB::table('medecins')
+            ->join('specialites', 'medecins.specialite_id', '=', 'specialites.id')
+            ->select('medecins.*', 'specialites.nom AS specialite')
+            ->where('medecins.id', $id)
+            ->first();
 
         if (is_null($medecin)) {
             return response()->json([

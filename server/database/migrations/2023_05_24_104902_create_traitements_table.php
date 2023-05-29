@@ -21,9 +21,9 @@ return new class extends Migration
             $table->dateTime('date');
             $table->boolean('etat');
             // TODO:TExt
-            $table->string('description');
+            $table->text('description');
             // TODO:TExt
-            $table->string('reponse')->nullable();
+            $table->text('reponse')->nullable();
             $table->foreignIdFor(Categorie::class)->nullOnDelete();
             $table->foreignIdFor(Patient::class)->nullOnDelete();
             $table->foreignIdFor(Medecin::class)->nullOnDelete()->nullable();
