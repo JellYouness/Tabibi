@@ -22,10 +22,11 @@ return new class extends Migration
             $table->string('email');
             $table->integer('telephone');
             $table->date('naissance');
-            $table->enum('civilité',['male','female']);
+            $table->enum('civilité', ['male', 'female']);
             $table->string('adresse');
             $table->string('image')->nullable();
             $table->string('password')->default('12345678');
+            // Nedd to removed online
             $table->boolean('online')->default(false);
             $table->rememberToken();
             $table->foreignIdFor(Specialite::class)->nullOnDelete();

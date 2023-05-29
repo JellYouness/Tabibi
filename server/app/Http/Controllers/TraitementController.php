@@ -17,14 +17,16 @@ class TraitementController extends Controller
     }
 
     public function index_patient($id){
+        // TODO:get the latest 
         $traitement = Traitement::with(['patient','medecin.specialite','categorie.sous_type.urgence'])
         ->where('patient_id', $id)
         ->latest()
         ->get();
         return response()->json($traitement);
     }
-
+    
     public function index_medecin($id){
+        // TODO:get the latest 
        $traitement = Traitement::with(['patient','medecin.specialite','categorie.sous_type.urgence'])
         ->where('medecin_id', $id)
         ->latest()

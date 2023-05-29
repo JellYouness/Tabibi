@@ -19,6 +19,8 @@ return new class extends Migration
             $table->id();
             $table->string('libelle');
             $table->string('description');
+            $table->text('description');
+            // TODO:Need to change
             $table->string('image')->nullable();
             $table->foreignIdFor(SousType::class)->nullOnDelete();
             $table->timestamps();
