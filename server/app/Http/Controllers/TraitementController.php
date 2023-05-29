@@ -18,13 +18,16 @@ class TraitementController extends Controller
 
     public function index_patient($id){
         $traitement = Traitement::with(['patient','medecin.specialite','categorie.sous_type.urgence'])
-        ->where('patient_id', $id)->get();
+        ->where('patient_id', $id)
+        ->latest()
+        ->get();
         return response()->json($traitement);
     }
 
     public function index_medecin($id){
        $traitement = Traitement::with(['patient','medecin.specialite','categorie.sous_type.urgence'])
         ->where('medecin_id', $id)
+        ->latest()
         ->get();
         return response()->json($traitement);
     }
@@ -32,13 +35,15 @@ class TraitementController extends Controller
     public function index_consulte(){
         $traitement = Traitement::with(['patient','medecin.specialite','categorie.sous_type.urgence'])
         ->where('etat', 1)
+        ->latest()
         ->get();
         return response()->json($traitement);
     }
 
     public function index_nonconsulte(){
         $traitement = Traitement::with(['patient','categorie.sous_type.urgence'])
-        ->where('etat', 0)->get();
+        ->where('etat', 0)->latest()
+        ->get();
         return response()->json($traitement);
     }
     

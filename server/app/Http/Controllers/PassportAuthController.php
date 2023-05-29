@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class PassportAuthController extends Controller
 {
@@ -24,17 +26,20 @@ class PassportAuthController extends Controller
 
     public function login(Request $request){
         $data = [
-            'username' => $request->username,
+            'email' => $request->email,
             'password' => $request->password
         ];
-        if(auth()->attempt($data)){
+         $user = User::where('email', $request->email)->first();
+        //  if ($user && Hash::check($request->password, $user->password)) {
+            // $token = $user->createToken('AuthByIs-Tech')->accessToken;
+        if(Auth::attempt($request->only(['email', 'password']))){
             $token =  auth()->user()->createToken('AuthByIs-Tech')->accessToken;
-            $id = auth()->user()->id;
-            $username =  auth()->user()->username;
-            $role =  auth()->user()->role;
+            $id = $user->id_fk;
+            $username = $user->email;
+            $role =  $user->role;
             return response()->json(['id'=>$id,'username'=> $username,'role' => $role,'token'=> $token],200);
         }else{
-            return response()->json(['error'=> 'Unauthorised'],401);
+            return response()->json(['error'=> $user],401);
         } 
         
     }

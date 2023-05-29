@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Medecin;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -77,8 +78,15 @@ class MedecinController extends Controller
                 Storage::put('public/'.$filename, $image);
                 $input['image'] = $filename;
         }
-
+        $input['password'] = bcrypt($request->password);
         $medecin =  Medecin::create($input);
+        $user = User::create([
+            'email' => $medecin->email,
+            'password' => $medecin->password,
+            'role' => 'medecin',
+            'id_fk' => $medecin->id,
+        ]);
+        $user->createToken('AuthByIs-Tech')->accessToken;
 
         return response()->json([
             'message'=> 'Medecin created successfully',

@@ -358,7 +358,7 @@ const Urgences = () => {
                 {loading ? <CircularProgress /> : null}
             </Stack>
             <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{ marginTop: '1rem' }}>
-                {rows.map((row, index) => {
+                {visibleRows.map((row, index) => {
                     return (
                         <Grid item xs={3} key={row.id}>
                             <MainCard

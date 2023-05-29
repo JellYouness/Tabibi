@@ -255,7 +255,13 @@ const OrderTable = () => {
                                         <TableCell align="left">{row.categorie.sous_type.urgence.libelle}</TableCell>
                                         <TableCell align="left">
                                             <Stack direction="column" alignItems="flex-start">
-                                                <Typography variant="subtitle1" minWidth="100%">
+                                                <Typography
+                                                    component={RouterLink}
+                                                    to="/traitements-patient"
+                                                    state={{ patient: row.patient.id }}
+                                                    variant="subtitle1"
+                                                    minWidth="100%"
+                                                >
                                                     {row.patient.nom} {row.patient.prenom}
                                                 </Typography>
                                             </Stack>
@@ -264,7 +270,13 @@ const OrderTable = () => {
                                         <TableCell align="left">
                                             {row.medecin ? (
                                                 <Stack direction="column" alignItems="flex-start">
-                                                    <Typography variant="subtitle1" minWidth="100%">
+                                                    <Typography
+                                                        component={RouterLink}
+                                                        to="/traitements-medecin"
+                                                        state={{ medecin: row.medecin.id }}
+                                                        variant="subtitle1"
+                                                        minWidth="100%"
+                                                    >
                                                         {row.medecin.nom} {row.medecin.prenom}
                                                     </Typography>
                                                     <Typography variant="subtitle2" color="textSecondary" fontWeight="normal">

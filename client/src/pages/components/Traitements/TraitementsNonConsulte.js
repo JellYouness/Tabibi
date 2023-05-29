@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 // material-ui
 import {
@@ -38,7 +39,6 @@ import MainCard from 'components/MainCard';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { fetchMedecins } from 'store/reducers/medecins/medecinSlice';
-import { useNavigate } from 'react-router';
 
 const EditIcon = styled.a`
     padding: 4px 3px;
@@ -321,7 +321,13 @@ const NonConsulte = () => {
                                             <TableCell align="left">{row.categorie.sous_type.urgence.libelle}</TableCell>
                                             <TableCell align="left">
                                                 <Stack direction="column" alignItems="flex-start">
-                                                    <Typography variant="subtitle1" minWidth="100%">
+                                                    <Typography
+                                                        component={RouterLink}
+                                                        to="/traitements-patient"
+                                                        state={{ patient: row.patient.id }}
+                                                        variant="subtitle1"
+                                                        minWidth="100%"
+                                                    >
                                                         {row.patient.nom} {row.patient.prenom}
                                                     </Typography>
                                                 </Stack>

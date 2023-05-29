@@ -365,7 +365,7 @@ const SousTypes = () => {
                 Les sous-types d'urgence {state.urgence.libelle}:
             </Typography>
             <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                {rows.map((row, index) => {
+                {visibleRows.map((row, index) => {
                     return (
                         <Grid item xs={3} key={row.id}>
                             <MainCard

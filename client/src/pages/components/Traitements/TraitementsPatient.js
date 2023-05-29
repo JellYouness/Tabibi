@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useEffect, useMemo, useState } from 'react';
+import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 
 // material-ui
 import {
@@ -15,19 +15,29 @@ import {
     TablePagination,
     TableRow,
     Typography,
-    Chip
+    Chip,
+    TextField,
+    InputAdornment
 } from '@mui/material';
-import { Add } from '@mui/icons-material';
+import { Add, Search } from '@mui/icons-material';
 
 // third-party
 import NumberFormat from 'react-number-format';
-import { fetchTraitementsPatient } from 'store/reducers/traitements/traitementSlice';
+import {
+    fetchTraitements,
+    fetchTraitementsConsulte,
+    fetchTraitementsMedecin,
+    fetchTraitementsNonConsulte,
+    fetchTraitementsPatient
+} from 'store/reducers/traitements/traitementSlice';
 
 // project import
 import Dot from 'components/@extended/Dot';
 import styled from 'styled-components';
 import { useTheme } from '@mui/material/styles';
 import { useDispatch, useSelector } from 'react-redux';
+import MainCard from 'components/MainCard';
+import '../style.css';
 
 const EditIcon = styled.a`
     padding: 4px 3px;
@@ -83,10 +93,16 @@ function stableSort(array, comparator) {
 
 const headCells = [
     {
-        id: 'Categorie',
+        id: 'patient',
+        align: 'left',
+        disablePadding: false,
+        label: 'Patient'
+    },
+    {
+        id: 'Medecin',
         align: 'left',
         disablePadding: true,
-        label: 'Categorie'
+        label: 'Medecin'
     },
     {
         id: 'Urgence',
@@ -95,22 +111,16 @@ const headCells = [
         label: 'Urgence'
     },
     {
-        id: 'patient',
+        id: 'Categorie',
         align: 'left',
         disablePadding: false,
-        label: 'Patient'
+        label: 'Categorie'
     },
     {
         id: 'date',
         align: 'left',
         disablePadding: false,
         label: 'Date'
-    },
-    {
-        id: 'medecin',
-        align: 'left',
-        disablePadding: false,
-        label: 'Medecin'
     },
     {
         id: 'etat',
@@ -125,7 +135,7 @@ const headCells = [
 function OrderTableHead({ order, orderBy }) {
     return (
         <TableHead>
-            <TableRow>
+            <TableRow bgColor="f5f5f5">
                 {headCells.map((headCell) => (
                     <TableCell
                         key={headCell.id}
@@ -184,12 +194,13 @@ OrderStatus.propTypes = {
 // ==============================|| ORDER TABLE ||============================== //
 
 const TraitemenetsPatient = () => {
+    let { state } = useLocation();
     const navigate = useNavigate();
     JSON.parse(localStorage.getItem('user')).role !== 'admin' ? null : navigate('/404');
     const dispatch = useDispatch();
     const { records, loading, error, record } = useSelector((state) => state.traitements);
     useEffect(() => {
-        dispatch(fetchTraitementsPatient(2));
+        state !== null ? dispatch(fetchTraitementsPatient(state.patient)) : dispatch(fetchTraitementsNonConsulte());
     }, [dispatch]);
     const rows = records;
 
@@ -199,6 +210,37 @@ const TraitemenetsPatient = () => {
     const [selected] = useState([]);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [searchCount, setSearchCount] = useState();
+    const InitialRows = useMemo(
+        () => stableSort(rows, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
+        [order, orderBy, page, rowsPerPage]
+    );
+
+    const [visibleRows, setvisibleRows] = useState(InitialRows);
+    useMemo(
+        () => setvisibleRows(stableSort(rows, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)),
+        [order, orderBy, page, rowsPerPage, records]
+    );
+    const [rowsLength, setRowsLength] = useState(rows.length);
+
+    const requestSearch = (searchedVal) => {
+        if (searchedVal === '') {
+            setvisibleRows(rows);
+            setRowsLength(rows.length);
+            setSearchCount(undefined);
+            return;
+        }
+        const filteredRows = rows.filter((row) => {
+            return (
+                row.patient.nom.toLowerCase().includes(searchedVal.toLowerCase()) ||
+                row.patient.prenom.toLowerCase().includes(searchedVal.toLowerCase())
+            );
+        });
+        setvisibleRows(stableSort(filteredRows, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage));
+        // setvisibleRows(filteredRows);
+        setRowsLength(filteredRows.length);
+        setSearchCount(filteredRows.length);
+    };
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -212,33 +254,51 @@ const TraitemenetsPatient = () => {
     const isSelected = (trackingNo) => selected.indexOf(trackingNo) !== -1;
 
     return (
-        <Box>
-            <TableContainer
-                sx={{
-                    width: '100%',
-                    overflowX: 'auto',
-                    position: 'relative',
-                    display: 'block',
-                    maxWidth: '100%',
-                    '& td, & th': { whiteSpace: 'nowrap' }
-                }}
-            >
-                <Table
-                    aria-labelledby="tableTitle"
+        <MainCard>
+            <Box>
+                <Stack direction="row" alignItems="center" spacing={1}>
+                    <TextField
+                        label="Rechercher"
+                        onChange={(searchVal) => requestSearch(searchVal.target.value)}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <Search />
+                                </InputAdornment>
+                            )
+                        }}
+                    />
+                    {searchCount ? (
+                        <Typography variant="subtitle1" color="textSecondary" fontWeight="normal">
+                            ({searchCount} trouvés)
+                        </Typography>
+                    ) : null}
+                </Stack>
+                <TableContainer
                     sx={{
-                        '& .MuiTableCell-root:first-child': {
-                            pl: 2
-                        },
-                        '& .MuiTableCell-root:last-child': {
-                            pr: 3
-                        }
+                        width: '100%',
+                        overflowX: 'auto',
+                        position: 'relative',
+                        display: 'block',
+                        maxWidth: '100%',
+                        '& td, & th': { whiteSpace: 'nowrap' },
+                        marginTop: '1rem'
                     }}
                 >
-                    <OrderTableHead order={order} orderBy={orderBy} />
-                    <TableBody>
-                        {stableSort(rows, getComparator(order, orderBy))
-                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((row, index) => {
+                    <Table
+                        aria-labelledby="tableTitle"
+                        sx={{
+                            '& .MuiTableCell-root:first-child': {
+                                pl: 2
+                            },
+                            '& .MuiTableCell-root:last-child': {
+                                pr: 3
+                            }
+                        }}
+                    >
+                        <OrderTableHead order={order} orderBy={orderBy} />
+                        <TableBody>
+                            {visibleRows.map((row, index) => {
                                 const isItemSelected = isSelected(row.trackingNo);
                                 const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -251,10 +311,6 @@ const TraitemenetsPatient = () => {
                                         tabIndex={-1}
                                         key={row.id}
                                     >
-                                        <TableCell component="th" id={labelId} scope="row" align="left">
-                                            {row.categorie.libelle}
-                                        </TableCell>
-                                        <TableCell align="left">{row.categorie.sous_type.urgence.libelle}</TableCell>
                                         <TableCell align="left">
                                             <Stack direction="column" alignItems="flex-start">
                                                 <Typography variant="subtitle1" minWidth="100%">
@@ -262,7 +318,6 @@ const TraitemenetsPatient = () => {
                                                 </Typography>
                                             </Stack>
                                         </TableCell>
-                                        <TableCell align="left">{row.date}</TableCell>
                                         <TableCell align="left">
                                             {row.medecin ? (
                                                 <Stack direction="column" alignItems="flex-start">
@@ -283,25 +338,31 @@ const TraitemenetsPatient = () => {
                                                 <Typography>--------</Typography>
                                             )}
                                         </TableCell>
+                                        <TableCell align="left">{row.categorie.sous_type.urgence.libelle}</TableCell>
+                                        <TableCell component="th" id={labelId} scope="row" align="left">
+                                            {row.categorie.libelle}
+                                        </TableCell>
+                                        <TableCell align="left">{row.date}</TableCell>
                                         <TableCell align="center">
                                             <OrderStatus status={row.etat} />
                                         </TableCell>
                                     </TableRow>
                                 );
                             })}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            <TablePagination
-                rowsPerPageOptions={[5, 10, 20]}
-                component="div"
-                count={rows.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-        </Box>
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                <TablePagination
+                    rowsPerPageOptions={[5, 10, 20]}
+                    component="div"
+                    count={rows.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+            </Box>
+        </MainCard>
     );
 };
 

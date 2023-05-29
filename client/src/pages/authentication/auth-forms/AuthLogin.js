@@ -63,9 +63,9 @@ const AuthLogin = () => {
     // }, [user, isError, isSuccess, message, navigate, dispatch]);
 
     const handleLogin = (formValue) => {
-        const { username, password } = formValue;
+        const { email, password } = formValue;
         try {
-            dispatch(login({ username, password }));
+            dispatch(login({ email, password }));
             // dispatch(clearMessage());
         } catch (err) {
             console.log(err);
@@ -79,12 +79,12 @@ const AuthLogin = () => {
         <>
             <Formik
                 initialValues={{
-                    username: 'admin',
+                    email: 'admin',
                     password: '12345678',
                     submit: null
                 }}
                 validationSchema={Yup.object().shape({
-                    username: Yup.string().required('username is required'),
+                    email: Yup.string().required('email is required'),
                     password: Yup.string().max(255).required('Password is required')
                 })}
                 onSubmit={handleLogin}
@@ -95,21 +95,21 @@ const AuthLogin = () => {
                             <Grid item xs={12}>
                                 <Stack spacing={1}>
                                     {isLoading ? <CircularProgress style={{ margin: '0 auto' }} /> : null}
-                                    <InputLabel htmlFor="username-login">Username</InputLabel>
+                                    <InputLabel htmlFor="email-login">email</InputLabel>
                                     <OutlinedInput
-                                        id="username-login"
-                                        type="username"
-                                        value={values.username}
-                                        name="username"
+                                        id="email-login"
+                                        type="email"
+                                        value={values.email}
+                                        name="email"
                                         onBlur={handleBlur}
                                         onChange={handleChange}
-                                        placeholder="Enter username"
+                                        placeholder="Enter email"
                                         fullWidth
-                                        error={Boolean(touched.username && errors.username)}
+                                        error={Boolean(touched.email && errors.email)}
                                     />
-                                    {touched.username && errors.username && (
-                                        <FormHelperText error id="standard-weight-helper-text-username-login">
-                                            {errors.username}
+                                    {touched.email && errors.email && (
+                                        <FormHelperText error id="standard-weight-helper-text-email-login">
+                                            {errors.email}
                                         </FormHelperText>
                                     )}
                                 </Stack>
@@ -170,7 +170,7 @@ const AuthLogin = () => {
                             </Grid>
                             {error && (
                                 <Grid item xs={12}>
-                                    <FormHelperText error>Username ou le mot de passe est incorrect</FormHelperText>
+                                    <FormHelperText error>email ou le mot de passe est incorrect</FormHelperText>
                                 </Grid>
                             )}
                             <Grid item xs={12}>

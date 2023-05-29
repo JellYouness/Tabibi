@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 
 // material-ui
@@ -15,13 +15,15 @@ import {
     TablePagination,
     TableRow,
     Typography,
-    Chip
+    Chip,
+    TextField,
+    InputAdornment
 } from '@mui/material';
-import { Add } from '@mui/icons-material';
+import { Add, Search } from '@mui/icons-material';
 
 // third-party
 import NumberFormat from 'react-number-format';
-import { fetchTraitementsMedecin } from 'store/reducers/traitements/traitementSlice';
+import { fetchTraitements, fetchTraitementsConsulte, fetchTraitementsMedecin } from 'store/reducers/traitements/traitementSlice';
 
 // project import
 import Dot from 'components/@extended/Dot';
@@ -85,16 +87,10 @@ function stableSort(array, comparator) {
 
 const headCells = [
     {
-        id: 'Categorie',
+        id: 'Medecin',
         align: 'left',
         disablePadding: true,
-        label: 'Categorie'
-    },
-    {
-        id: 'Urgence',
-        align: 'left',
-        disablePadding: false,
-        label: 'Urgence'
+        label: 'Medecin'
     },
     {
         id: 'patient',
@@ -103,16 +99,22 @@ const headCells = [
         label: 'Patient'
     },
     {
+        id: 'Urgence',
+        align: 'left',
+        disablePadding: false,
+        label: 'Urgence'
+    },
+    {
+        id: 'Categorie',
+        align: 'left',
+        disablePadding: false,
+        label: 'Categorie'
+    },
+    {
         id: 'date',
         align: 'left',
         disablePadding: false,
         label: 'Date'
-    },
-    {
-        id: 'medecin',
-        align: 'left',
-        disablePadding: false,
-        label: 'Medecin'
     },
     {
         id: 'etat',
@@ -192,8 +194,8 @@ const TraitemenetsMedecin = () => {
     const dispatch = useDispatch();
     const { records, loading, error, record } = useSelector((state) => state.traitements);
     useEffect(() => {
-        dispatch(fetchTraitementsMedecin(state.medecin));
-    }, [dispatch]);
+        state !== null ? dispatch(fetchTraitementsMedecin(state.medecin)) : dispatch(fetchTraitementsConsulte());
+    }, [dispatch, state]);
     const rows = records;
 
     const theme = useTheme();
@@ -202,6 +204,37 @@ const TraitemenetsMedecin = () => {
     const [selected] = useState([]);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [searchCount, setSearchCount] = useState();
+    const InitialRows = useMemo(
+        () => stableSort(rows, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
+        [order, orderBy, page, rowsPerPage]
+    );
+
+    const [visibleRows, setvisibleRows] = useState(InitialRows);
+    useMemo(
+        () => setvisibleRows(stableSort(rows, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)),
+        [order, orderBy, page, rowsPerPage, records]
+    );
+    const [rowsLength, setRowsLength] = useState(rows.length);
+
+    const requestSearch = (searchedVal) => {
+        if (searchedVal === '') {
+            setvisibleRows(rows);
+            setRowsLength(rows.length);
+            setSearchCount(undefined);
+            return;
+        }
+        const filteredRows = rows.filter((row) => {
+            return (
+                row.medecin.nom.toLowerCase().includes(searchedVal.toLowerCase()) ||
+                row.medecin.prenom.toLowerCase().includes(searchedVal.toLowerCase())
+            );
+        });
+        setvisibleRows(stableSort(filteredRows, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage));
+        // setvisibleRows(filteredRows);
+        setRowsLength(filteredRows.length);
+        setSearchCount(filteredRows.length);
+    };
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -217,6 +250,24 @@ const TraitemenetsMedecin = () => {
     return (
         <MainCard>
             <Box>
+                <Stack direction="row" alignItems="center" spacing={1}>
+                    <TextField
+                        label="Rechercher"
+                        onChange={(searchVal) => requestSearch(searchVal.target.value)}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <Search />
+                                </InputAdornment>
+                            )
+                        }}
+                    />
+                    {searchCount ? (
+                        <Typography variant="subtitle1" color="textSecondary" fontWeight="normal">
+                            ({searchCount} trouvés)
+                        </Typography>
+                    ) : null}
+                </Stack>
                 <TableContainer
                     sx={{
                         width: '100%',
@@ -224,7 +275,8 @@ const TraitemenetsMedecin = () => {
                         position: 'relative',
                         display: 'block',
                         maxWidth: '100%',
-                        '& td, & th': { whiteSpace: 'nowrap' }
+                        '& td, & th': { whiteSpace: 'nowrap' },
+                        marginTop: '1rem'
                     }}
                 >
                     <Table
@@ -240,22 +292,21 @@ const TraitemenetsMedecin = () => {
                     >
                         <OrderTableHead order={order} orderBy={orderBy} />
                         <TableBody>
-                            {stableSort(rows, getComparator(order, orderBy))
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((row, index) => {
-                                    const isItemSelected = isSelected(row.trackingNo);
-                                    const labelId = `enhanced-table-checkbox-${index}`;
+                            {visibleRows.map((row, index) => {
+                                const isItemSelected = isSelected(row.trackingNo);
+                                const labelId = `enhanced-table-checkbox-${index}`;
 
-                                    return (
-                                        <TableRow
-                                            hover
-                                            role="checkbox"
-                                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                            aria-checked={isItemSelected}
-                                            tabIndex={-1}
-                                            key={row.id}
-                                        >
-                                            <TableCell align="left">
+                                return (
+                                    <TableRow
+                                        hover
+                                        role="checkbox"
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                        aria-checked={isItemSelected}
+                                        tabIndex={-1}
+                                        key={row.id}
+                                    >
+                                        <TableCell align="left">
+                                            {row.medecin ? (
                                                 <Stack direction="column" alignItems="flex-start">
                                                     <Typography variant="subtitle1" minWidth="100%">
                                                         {row.medecin.nom} {row.medecin.prenom}
@@ -264,31 +315,34 @@ const TraitemenetsMedecin = () => {
                                                         {row.medecin.specialite.nom}
                                                     </Typography>
                                                 </Stack>
-                                            </TableCell>
-                                            <TableCell align="left">
-                                                <Stack direction="column" alignItems="flex-start">
-                                                    <Typography
-                                                        component={RouterLink}
-                                                        to="/traitements-patient"
-                                                        state={{ patient: row.patient.id }}
-                                                        variant="subtitle1"
-                                                        minWidth="100%"
-                                                    >
-                                                        {row.patient.nom} {row.patient.prenom}
-                                                    </Typography>
-                                                </Stack>
-                                            </TableCell>
-                                            <TableCell align="left">{row.categorie.sous_type.urgence.libelle}</TableCell>
-                                            <TableCell component="th" id={labelId} scope="row" align="left">
-                                                {row.categorie.libelle}
-                                            </TableCell>
-                                            <TableCell align="left">{row.date}</TableCell>
-                                            <TableCell align="center">
-                                                <OrderStatus status={row.etat} />
-                                            </TableCell>
-                                        </TableRow>
-                                    );
-                                })}
+                                            ) : (
+                                                <Typography>--------</Typography>
+                                            )}
+                                        </TableCell>
+                                        <TableCell align="left">
+                                            <Stack direction="column" alignItems="flex-start">
+                                                <Typography
+                                                    component={RouterLink}
+                                                    to="/traitements-patient"
+                                                    state={{ patient: row.patient.id }}
+                                                    variant="subtitle1"
+                                                    minWidth="100%"
+                                                >
+                                                    {row.patient.nom} {row.patient.prenom}
+                                                </Typography>
+                                            </Stack>
+                                        </TableCell>
+                                        <TableCell align="left">{row.categorie.sous_type.urgence.libelle}</TableCell>
+                                        <TableCell component="th" id={labelId} scope="row" align="left">
+                                            {row.categorie.libelle}
+                                        </TableCell>
+                                        <TableCell align="left">{row.date}</TableCell>
+                                        <TableCell align="center">
+                                            <OrderStatus status={row.etat} />
+                                        </TableCell>
+                                    </TableRow>
+                                );
+                            })}
                         </TableBody>
                     </Table>
                 </TableContainer>

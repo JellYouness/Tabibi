@@ -280,9 +280,7 @@ const Specialites = () => {
             return;
         }
         const filteredRows = rows.filter((row) => {
-            return (
-                row.nom.toLowerCase().includes(searchedVal.toLowerCase()) || row.prenom.toLowerCase().includes(searchedVal.toLowerCase())
-            );
+            return row.nom.toLowerCase().includes(searchedVal.toLowerCase());
         });
         // setvisibleRows(stableSort(filteredRows, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage));
         setvisibleRows(filteredRows);

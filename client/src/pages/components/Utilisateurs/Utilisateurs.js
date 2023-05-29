@@ -112,7 +112,13 @@ const headCells = [
         id: 'name',
         align: 'left',
         disablePadding: true,
-        label: 'Specialité'
+        label: 'Email'
+    },
+    {
+        id: 'role',
+        align: 'left',
+        disablePadding: true,
+        label: 'Role'
     },
     {
         id: 'actions',
@@ -322,7 +328,7 @@ const Users = () => {
         onSubmit: (values, actions) => {
             values = {
                 id: values.id || null,
-                username: values.username,
+                email: values.email,
                 password: values.password,
                 role: values.role
             };
@@ -335,7 +341,7 @@ const Users = () => {
             }
         },
         validationSchema: yup.object({
-            username: yup.string().max(50, 'Trop Long').required('Le nom est requis'),
+            email: yup.string().max(50, 'Trop Long').required('Le nom est requis'),
             password: yup.string().max(50, 'Trop Long').min(8, 'Trop court | 8 ').required('Le mot de passe est requis')
         })
     });
@@ -440,7 +446,7 @@ const Users = () => {
                                         <div className="form">
                                             <Stack>
                                                 <FormLabel style={{ marginBottom: '0.2rem', color: theme.palette.secondary.darker }}>
-                                                    Username:
+                                                    Email:
                                                 </FormLabel>
                                                 <TextField
                                                     id="username"
@@ -546,7 +552,8 @@ const Users = () => {
                                         <TableCell component="th" id={labelId} scope="row" align="left">
                                             {row.id}
                                         </TableCell>
-                                        <TableCell>{row.username}</TableCell>
+                                        <TableCell>{row.email}</TableCell>
+                                        <TableCell>{row.role}</TableCell>
                                         <TableCell align="center">
                                             <EditIcon>
                                                 <EditOutlined

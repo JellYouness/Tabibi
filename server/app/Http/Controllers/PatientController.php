@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Patient;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -53,16 +54,24 @@ class PatientController extends Controller
                 'error'=> $validator->errors()
                 ],400);
         }
+
+        
         if($request->image){
-        $base64 = explode(",", $request->image);
-                $image = base64_decode($base64[1]);
-                $filename = 'images/'.time() . '.' . 'png';
-                Storage::put('public/'.$filename, $image);
-                $input['image'] = $filename;
+            $base64 = explode(",", $request->image);
+            $image = base64_decode($base64[1]);
+            $filename = 'images/'.time() . '.' . 'png';
+            Storage::put('public/'.$filename, $image);
+            $input['image'] = $filename;
         }
         $input['password'] = bcrypt($request->password);
         $patient =  Patient::create($input);
-        $patient->createToken('AuthByIs-Tech')->accessToken;
+
+        $user = User::create([
+            'email' => $patient->email,
+            'password' => $patient->password,
+            'role' => 'patient',
+            'id_fk' => $patient->id,
+        ]);
 
         return response()->json([
             'message'=> 'Patient created successfully',
