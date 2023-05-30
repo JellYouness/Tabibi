@@ -148,26 +148,27 @@ OrderTableHead.propTypes = {
 
 // ==============================|| ORDER TABLE - STATUS ||============================== //
 
-const OrderStatus = ({ status }) => {
+const OrderStatus = ({ status, id }) => {
     let color;
     let title;
 
     switch (status) {
         case 0:
             color = 'warning';
-            title = 'Pending';
+            title = 'En attente';
             break;
         case 1:
             color = 'success';
-            title = 'Approved';
-            break;
-        case 2:
-            color = 'error';
-            title = 'Rejected';
+            title = 'Consulté';
             break;
         default:
             color = 'primary';
             title = 'None';
+    }
+
+    if (id === 0) {
+        color = 'error';
+        title = 'Rejected';
     }
 
     return (
@@ -178,7 +179,8 @@ const OrderStatus = ({ status }) => {
 };
 
 OrderStatus.propTypes = {
-    status: PropTypes.number
+    status: PropTypes.number,
+    id: PropTypes.any
 };
 
 // ==============================|| ORDER TABLE ||============================== //
@@ -288,7 +290,7 @@ const OrderTable = () => {
                                             )}
                                         </TableCell>
                                         <TableCell align="center">
-                                            <OrderStatus status={row.etat} />
+                                            <OrderStatus status={row.etat} id={row.medecin_id} />
                                         </TableCell>
                                     </TableRow>
                                 );

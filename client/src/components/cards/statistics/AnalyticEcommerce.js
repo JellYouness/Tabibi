@@ -8,6 +8,7 @@ import MainCard from 'components/MainCard';
 
 // assets
 import { RiseOutlined, FallOutlined } from '@ant-design/icons';
+import { TaskAlt, HourglassEmpty } from '@mui/icons-material';
 
 // ==============================|| STATISTICS - ECOMMERCE CARD  ||============================== //
 
@@ -23,21 +24,21 @@ const AnalyticEcommerce = ({ color, title, count, percentage, isLoss, extra }) =
                         {count}
                     </Typography>
                 </Grid>
-                {percentage && (
+                {color && (
                     <Grid item>
-                        <Chip
+                        {/* <Chip
                             variant="combined"
                             color={color}
                             icon={
                                 <>
-                                    {!isLoss && <RiseOutlined style={{ fontSize: '0.75rem', color: 'inherit' }} />}
-                                    {isLoss && <FallOutlined style={{ fontSize: '0.75rem', color: 'inherit' }} />}
+                                    {color === 'success' && <TaskAlt style={{ fontSize: '1rem', color: 'inherit' }} />}
+                                    {color == 'warning' && <HourglassEmpty style={{ fontSize: '1rem', color: 'inherit' }} />}
                                 </>
                             }
-                            label={`${percentage}%`}
-                            sx={{ ml: 1.25, pl: 1 }}
                             size="small"
-                        />
+                        /> */}
+                        {color === 'success' && <TaskAlt color="success" fontSize="medium" />}
+                        {color == 'warning' && <HourglassEmpty color="warning" style={{ fontSize: '1rem', color: 'warning' }} />}
                     </Grid>
                 )}
             </Grid>

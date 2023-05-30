@@ -1,10 +1,17 @@
 // assets
-import { ReceiptLongOutlined, PendingActionsOutlined } from '@mui/icons-material';
+import {
+    ReceiptLongOutlined,
+    PendingActionsOutlined,
+    MedicalServicesOutlined,
+    MasksOutlined
+} from '@mui/icons-material';
 
 // icons
 const icons = {
     ReceiptLongOutlined,
-    PendingActionsOutlined
+    PendingActionsOutlined,
+    MasksOutlined,
+    MedicalServicesOutlined
 };
 
 // ==============================|| MENU ITEMS - DASHBOARD ||============================== //
@@ -35,7 +42,7 @@ const traitement = {
             title: 'Cons. par Medecin',
             type: 'item',
             url: '/traitements-medecin',
-            icon: icons.PendingActionsOutlined,
+            icon: icons.MedicalServicesOutlined,
             breadcrumbs: true
         },
         {
@@ -43,7 +50,7 @@ const traitement = {
             title: 'Cons. par Patient',
             type: 'item',
             url: '/traitements-patient',
-            icon: icons.PendingActionsOutlined,
+            icon: icons.MasksOutlined,
             breadcrumbs: true
         }
     ]

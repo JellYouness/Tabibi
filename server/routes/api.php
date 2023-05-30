@@ -29,3 +29,4 @@ Route::get('traitements/patients/{id}',[TraitementController::class,'index_patie
 Route::get('traitements/medecins/{id}',[TraitementController::class,'index_medecin']);
 Route::get('traitementsConsulte',[TraitementController::class,'index_consulte']);
 Route::get('traitementsNonConsulte',[TraitementController::class,'index_nonconsulte']);
+Route::get('stats',[TraitementController::class,'stats']);

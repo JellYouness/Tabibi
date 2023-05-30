@@ -59,6 +59,7 @@ function a11yProps(index) {
 const Profile = () => {
     const { isLoggedIn } = useSelector((state) => state.auth);
     const username = isLoggedIn ? JSON.parse(localStorage.getItem('user')).username : null;
+    const role = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).role : null;
     const theme = useTheme();
     const dispatch = useDispatch();
 
@@ -149,7 +150,7 @@ const Profile = () => {
                                                         <Stack>
                                                             <Typography variant="h6">{username}</Typography>
                                                             <Typography variant="body2" color="textSecondary">
-                                                                UI/UX Designer
+                                                                {role}
                                                             </Typography>
                                                         </Stack>
                                                     </Stack>
@@ -161,7 +162,7 @@ const Profile = () => {
                                                 </Grid>
                                             </Grid>
                                         </CardContent>
-                                        {open && (
+                                        {/* {open && (
                                             <>
                                                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                                                     <Tabs
@@ -203,7 +204,7 @@ const Profile = () => {
                                                     <SettingTab />
                                                 </TabPanel>
                                             </>
-                                        )}
+                                        )} */}
                                     </MainCard>
                                 </ClickAwayListener>
                             </Paper>

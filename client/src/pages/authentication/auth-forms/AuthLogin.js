@@ -16,7 +16,8 @@ import {
     OutlinedInput,
     Stack,
     Typography,
-    CircularProgress
+    CircularProgress,
+    Box
 } from '@mui/material';
 
 // third party
@@ -79,7 +80,7 @@ const AuthLogin = () => {
         <>
             <Formik
                 initialValues={{
-                    email: 'admin',
+                    email: 'super@tabibi.com',
                     password: '12345678',
                     submit: null
                 }}
@@ -148,8 +149,8 @@ const AuthLogin = () => {
                                     )}
                                 </Stack>
                             </Grid>
-
-                            <Grid item xs={12} sx={{ mt: -1 }}>
+                            <Box> </Box>
+                            {/* <Grid item xs={12} sx={{ mt: -1 }}>
                                 <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
                                     <FormControlLabel
                                         control={
@@ -167,7 +168,7 @@ const AuthLogin = () => {
                                         Forgot Password?
                                     </Link>
                                 </Stack>
-                            </Grid>
+                            </Grid> */}
                             {error && (
                                 <Grid item xs={12}>
                                     <FormHelperText error>email ou le mot de passe est incorrect</FormHelperText>
@@ -182,7 +183,8 @@ const AuthLogin = () => {
                                         size="large"
                                         type="submit"
                                         variant="contained"
-                                        color="primary"
+                                        // color="primary"
+                                        sx={{ backgroundColor: '#45B3CB' }}
                                     >
                                         Login
                                     </Button>

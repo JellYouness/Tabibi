@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const initialState = { records: [], loading: false, error: null, record: null, edited: false };
+const initialState = { records: [], loading: false, error: null, record: null, edited: false, stats: [] };
 const API = process.env.REACT_APP_API_URL;
 const token = localStorage.getItem('TraitementToken');
 
@@ -9,6 +9,18 @@ export const fetchTraitements = createAsyncThunk('fetchTraitements', async (_, t
     const { rejectWithValue } = thunkAPI;
     try {
         const res = await axios.get(`${API}/api/traitements`, {
+            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }
+        });
+        return res.data;
+    } catch (error) {
+        return rejectWithValue(error.message);
+    }
+});
+
+export const Stats = createAsyncThunk('stats', async (_, thunkAPI) => {
+    const { rejectWithValue } = thunkAPI;
+    try {
+        const res = await axios.get(`${API}/api/stats`, {
             headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }
         });
         return res.data;
@@ -147,6 +159,19 @@ const traitementSlice = createSlice({
             state.record = action.payload;
         },
         [fetchTraitement.rejected]: (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        },
+        //get one Traitement post
+        [Stats.pending]: (state) => {
+            state.loading = true;
+            state.error = null;
+        },
+        [Stats.fulfilled]: (state, action) => {
+            state.loading = false;
+            state.stats = action.payload;
+        },
+        [Stats.rejected]: (state, action) => {
             state.loading = false;
             state.error = action.payload;
         },

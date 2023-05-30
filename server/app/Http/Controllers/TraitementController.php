@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Traitement;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class TraitementController extends Controller
@@ -13,6 +14,17 @@ class TraitementController extends Controller
         ->latest()
         ->get();
         return response()->json($traitements);
+    }
+
+    public function stats(){
+        $result = DB::table('traitements')
+            ->selectRaw('count(*) as alls, count(case when etat = 0 then 1 end) as etat0, count(case when etat = 1 then 1 end) as etat1')
+            ->first();
+        
+        $count = DB::table('patients')
+            ->count();
+            $result->patients = $count;
+        return response()->json($result);
     }
 
     public function index_patient($id){
@@ -64,6 +76,7 @@ class TraitementController extends Controller
             ]);
     }
 
+    
     public function store(Request $request){
         $input = $request->all();
         $validator = Validator::make($input,[
@@ -92,14 +105,15 @@ class TraitementController extends Controller
             ]);
     }
 
+
     public function update(Request $request, Traitement $traitement){
        
         $input = $request->all();
         $validator = Validator::make($input,[
              'etat' => ['boolean'],
              'description' => ['string'],
-             'reponse' => ['string'],
-             'medecin_id' => ['nullable', 'exists:medecins,id'],
+              'reponse' => ['string'],
+             'medecin_id' => ['nullable'],
         ]);
 
         if( $validator->fails()){
@@ -119,6 +133,7 @@ class TraitementController extends Controller
             'data'=> $traitement
             ]);
     }
+
 
     public function destroy(Traitement $traitement){
         

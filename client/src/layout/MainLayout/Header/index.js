@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { AppBar, IconButton, Toolbar, useMediaQuery } from '@mui/material';
+import { AppBar, IconButton, Toolbar, createTheme, useMediaQuery } from '@mui/material';
 
 // project import
 import AppBarStyled from './AppBarStyled';
@@ -14,6 +14,13 @@ import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 // ==============================|| MAIN LAYOUT - HEADER ||============================== //
 
 const Header = ({ open, handleDrawerToggle }) => {
+    const themeX = createTheme({
+        palette: {
+            neutral: {
+                main: '#4FC6E0'
+            }
+        }
+    });
     const theme = useTheme();
     const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
 
