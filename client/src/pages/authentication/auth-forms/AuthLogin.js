@@ -51,23 +51,10 @@ const AuthLogin = () => {
 
     const { isLoggedIn, isLoading, error } = useSelector((state) => state.auth);
 
-    // useEffect(() => {
-    //     if (isError) {
-    //         console.error(message);
-    //     }
-
-    //     if (isSuccess) {
-    //         navigate('/');
-    //     }
-
-    //     dispatch(reset());
-    // }, [user, isError, isSuccess, message, navigate, dispatch]);
-
     const handleLogin = (formValue) => {
         const { email, password } = formValue;
         try {
             dispatch(login({ email, password }));
-            // dispatch(clearMessage());
         } catch (err) {
             console.log(err);
         }
@@ -80,8 +67,8 @@ const AuthLogin = () => {
         <>
             <Formik
                 initialValues={{
-                    email: 'super@tabibi.com',
-                    password: '12345678',
+                    // email: 'super@tabibi.com',
+                    // password: '12345678',
                     submit: null
                 }}
                 validationSchema={Yup.object().shape({

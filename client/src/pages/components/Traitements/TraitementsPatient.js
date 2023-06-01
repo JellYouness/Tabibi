@@ -17,7 +17,8 @@ import {
     Typography,
     Chip,
     TextField,
-    InputAdornment
+    InputAdornment,
+    CircularProgress
 } from '@mui/material';
 import { Add, Search } from '@mui/icons-material';
 
@@ -176,9 +177,13 @@ const OrderStatus = ({ status, id }) => {
             title = 'None';
     }
 
-    if (id === 0) {
+    if (id !== null && status === 0) {
+        color = 'primary';
+        title = 'Attente au medecin';
+    }
+    if (id === 0 && status === 0) {
         color = 'error';
-        title = 'Rejected';
+        title = 'Refusé';
     }
 
     return (
@@ -201,7 +206,7 @@ const TraitemenetsPatient = () => {
     const dispatch = useDispatch();
     const { records, loading, error, record } = useSelector((state) => state.traitements);
     useEffect(() => {
-        state !== null ? dispatch(fetchTraitementsPatient(state.patient)) : dispatch(fetchTraitementsNonConsulte());
+        state !== null ? dispatch(fetchTraitementsPatient(state.patient)) : dispatch(fetchTraitements());
     }, [dispatch]);
     const rows = records;
 
@@ -274,6 +279,9 @@ const TraitemenetsPatient = () => {
                             ({searchCount} trouvés)
                         </Typography>
                     ) : null}
+                </Stack>
+                <Stack direction="column" alignItems="center">
+                    {loading ? <CircularProgress /> : null}
                 </Stack>
                 <TableContainer
                     sx={{

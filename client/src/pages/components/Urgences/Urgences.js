@@ -92,11 +92,13 @@ const Urgences = () => {
     const [openDialog, setOpenDialog] = React.useState(false);
     const [openDelete, setOpenDelete] = React.useState(false);
     const [openView, setOpenView] = React.useState(false);
-    const [visibleRows, setvisibleRows] = useState(records);
+    const InitialRows = React.useMemo(() => rows);
+    const [visibleRows, setvisibleRows] = useState(InitialRows);
+    React.useMemo(() => setvisibleRows(rows), [records]);
 
     const requestSearch = (searchedVal) => {
         if (searchedVal === '') {
-            setvisibleRows(rows);
+            setvisibleRows(InitialRows);
             setRowsLength(rows.length);
             setSearchCount(undefined);
             return;
@@ -163,8 +165,8 @@ const Urgences = () => {
             }
         },
         validationSchema: yup.object({
-            libelle: yup.string().max(50, 'Trop Long').required('La libelle est requis'),
-            description: yup.string().max(50, 'Trop Long').required('La description est requis')
+            libelle: yup.string().max(50, 'Trop Long').required('La libelle est requis')
+            // description: yup.string().max(50, 'Trop Long').required('La description est requis')
         })
     });
     function readURL(input) {

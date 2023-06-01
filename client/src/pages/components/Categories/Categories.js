@@ -94,11 +94,13 @@ const Categories = () => {
     const [openDialog, setOpenDialog] = React.useState(false);
     const [openDelete, setOpenDelete] = React.useState(false);
     const [openView, setOpenView] = React.useState(false);
-    const [visibleRows, setvisibleRows] = useState(records);
+    const InitialRows = React.useMemo(() => rows);
+    const [visibleRows, setvisibleRows] = useState(InitialRows);
+    React.useMemo(() => setvisibleRows(rows), [records]);
 
     const requestSearch = (searchedVal) => {
         if (searchedVal === '') {
-            setvisibleRows(rows);
+            setvisibleRows(InitialRows);
             setRowsLength(rows.length);
             setSearchCount(undefined);
             return;

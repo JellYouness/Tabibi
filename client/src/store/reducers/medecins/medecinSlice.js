@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const initialState = { records: [], loading: false, error: null, record: null };
+const initialState = { records: [], loading: false, error: null, record: {} };
 const API = process.env.REACT_APP_API_URL;
 const token = localStorage.getItem('userToken');
 
@@ -32,9 +32,9 @@ export const fetchMedecinsOnline = createAsyncThunk('fetchMedecinsOnline', async
 export const fetchMedecin = createAsyncThunk('fetchMedecin', async (id, thunkAPI) => {
     const { rejectWithValue } = thunkAPI;
     try {
-        const res = await fetch(`${API}api/medecins/${id}`);
+        const res = await fetch(`${API}/api/medecins/${id}`);
         const data = await res.json();
-        return data;
+        return data.data;
     } catch (error) {
         return rejectWithValue(error.message);
     }

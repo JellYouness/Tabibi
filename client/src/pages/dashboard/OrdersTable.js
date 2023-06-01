@@ -24,7 +24,7 @@ import NumberFormat from 'react-number-format';
 import { deleteTraitement, editTraitement, fetchTraitements, insertTraitement } from 'store/reducers/traitements/traitementSlice';
 
 // project import
-import Dot from 'components/@extended/Dot';
+import '../components/style.css';
 import styled from 'styled-components';
 import { useTheme } from '@mui/material/styles';
 import { useDispatch, useSelector } from 'react-redux';
@@ -165,10 +165,13 @@ const OrderStatus = ({ status, id }) => {
             color = 'primary';
             title = 'None';
     }
-
-    if (id === 0) {
+    if (id !== null && status === 0) {
+        color = 'primary';
+        title = 'Attente au medecin';
+    }
+    if (id === 0 && status === 0) {
         color = 'error';
-        title = 'Rejected';
+        title = 'Refusé';
     }
 
     return (
@@ -259,8 +262,8 @@ const OrderTable = () => {
                                             <Stack direction="column" alignItems="flex-start">
                                                 <Typography
                                                     component={RouterLink}
-                                                    to="/traitements-patient"
-                                                    state={{ patient: row.patient.id }}
+                                                    to="/patient-recherche"
+                                                    state={{ id: row.patient.id }}
                                                     variant="subtitle1"
                                                     minWidth="100%"
                                                 >
@@ -274,8 +277,8 @@ const OrderTable = () => {
                                                 <Stack direction="column" alignItems="flex-start">
                                                     <Typography
                                                         component={RouterLink}
-                                                        to="/traitements-medecin"
-                                                        state={{ medecin: row.medecin.id }}
+                                                        to="/medecin-recherche"
+                                                        state={{ id: row.medecin.id }}
                                                         variant="subtitle1"
                                                         minWidth="100%"
                                                     >

@@ -76,7 +76,7 @@ class SousTypeController extends Controller
         $validator = Validator::make($input,[
             'libelle' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string', 'max:1024'],
-            'image' => ['nullable', 'string'],
+            'image' => ['nullable'],
             'urgence_id' => ['required', 'exists:urgences,id'],
         ]);
 
@@ -92,7 +92,7 @@ class SousTypeController extends Controller
                 $image = base64_decode($base64[1]);
                 $filename = 'images/'.time() . '.' . 'png';
                 Storage::put('public/'.$filename, $image);
-                $input['image'] = $filename;
+                $request['image'] = $filename;
         }
 
         $sous_type=SousType::findOrFail($request->id);

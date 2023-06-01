@@ -1,10 +1,5 @@
 // assets
-import {
-    ReceiptLongOutlined,
-    PendingActionsOutlined,
-    MedicalServicesOutlined,
-    MasksOutlined
-} from '@mui/icons-material';
+import { ReceiptLongOutlined, PendingActionsOutlined, MedicalServicesOutlined, MasksOutlined } from '@mui/icons-material';
 
 // icons
 const icons = {
@@ -39,7 +34,7 @@ const traitement = {
         },
         {
             id: 'TraitementsMed',
-            title: 'Cons. par Medecin',
+            title: 'Historique medecin',
             type: 'item',
             url: '/traitements-medecin',
             icon: icons.MedicalServicesOutlined,
@@ -47,7 +42,7 @@ const traitement = {
         },
         {
             id: 'TraitementsPat',
-            title: 'Cons. par Patient',
+            title: 'Historique patient',
             type: 'item',
             url: '/traitements-patient',
             icon: icons.MasksOutlined,

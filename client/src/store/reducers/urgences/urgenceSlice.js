@@ -73,7 +73,7 @@ export const editUrgence = createAsyncThunk('editUrgence', async (item, thunkAPI
     const { rejectWithValue } = thunkAPI;
     try {
         const res = await fetch(`${API}/api/urgences/${item.id}`, {
-            method: 'PATCH',
+            method: 'PUT',
             body: JSON.stringify(item),
             headers: {
                 'Content-type': 'application/json; charset=UTF-8',

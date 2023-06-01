@@ -9,8 +9,10 @@ const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
 
 // render - utilities
 const Patients = Loadable(lazy(() => import('pages/components/Patients/Patients')));
+const PatientSearched = Loadable(lazy(() => import('pages/components/Patients/PatientSearched')));
 const Specialites = Loadable(lazy(() => import('pages/components/Specialites/Specialites')));
 const Medecins = Loadable(lazy(() => import('pages/components/Medecins/Medecins')));
+const MedecinSearched = Loadable(lazy(() => import('pages/components/Medecins/MedecinSearched')));
 const Urgences = Loadable(lazy(() => import('pages/components/Urgences/Urgences')));
 const SousTypes = Loadable(lazy(() => import('pages/components/SousTypes/SousTypes')));
 const Categories = Loadable(lazy(() => import('pages/components/Categories/Categories')));
@@ -88,6 +90,14 @@ const MainRoutes = {
         {
             path: '404',
             element: <Page404 />
+        },
+        {
+            path: 'patient-recherche',
+            element: <PatientSearched />
+        },
+        {
+            path: 'medecin-recherche',
+            element: <MedecinSearched />
         }
     ]
 };

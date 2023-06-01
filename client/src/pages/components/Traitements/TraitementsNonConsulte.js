@@ -24,7 +24,8 @@ import {
     Chip,
     Select,
     MenuItem,
-    Autocomplete
+    Autocomplete,
+    CircularProgress
 } from '@mui/material';
 import { Add } from '@mui/icons-material';
 
@@ -39,6 +40,7 @@ import MainCard from 'components/MainCard';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { fetchMedecins } from 'store/reducers/medecins/medecinSlice';
+import { fetchSpecialite, fetchSpecialites } from 'store/reducers/specialites/specialiteSlice';
 
 const EditIcon = styled.a`
     padding: 4px 3px;
@@ -161,9 +163,13 @@ const OrderStatus = ({ status, id }) => {
             title = 'None';
     }
 
-    if (id === 0) {
+    if (id !== null && status === 0) {
+        color = 'primary';
+        title = 'Attente au medecin';
+    }
+    if (id === 0 && status === 0) {
         color = 'error';
-        title = 'Rejected';
+        title = 'Refusé';
     }
 
     return (
@@ -185,8 +191,11 @@ const NonConsulte = () => {
     const dispatch = useDispatch();
     const { records, loading, error, edited } = useSelector((state) => state.traitements);
     const { records: medecins } = useSelector((state) => state.medecins);
+    const { records: specialites } = useSelector((state) => state.specialites);
+
     useEffect(() => {
         dispatch(fetchMedecins());
+        dispatch(fetchSpecialites());
         dispatch(fetchTraitementsNonConsulte());
     }, [dispatch, edited]);
     const rows = records;
@@ -204,6 +213,8 @@ const NonConsulte = () => {
     const [openDialog, setOpenDialog] = useState(false);
     const [toBeDeleted, setToBeDeleted] = useState();
     const [updateValues, setUpdateValues] = useState({});
+    const [spec, setSpec] = useState(null);
+    const [med, setMed] = useState(medecins);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -222,7 +233,7 @@ const NonConsulte = () => {
     const handleClose = () => {
         setToBeDeleted(null);
         setOpenDialog(false);
-        setUpdateValues({ medecin_id: null });
+        setUpdateValues({});
     };
 
     const formik = useFormik({
@@ -235,6 +246,7 @@ const NonConsulte = () => {
             };
             try {
                 dispatch(editTraitement(values));
+                dispatch(fetchTraitementsNonConsulte());
                 handleClose();
             } catch (error) {
                 setError(error.response.data);
@@ -249,10 +261,32 @@ const NonConsulte = () => {
                     <form onSubmit={formik.handleSubmit}>
                         <DialogContent>
                             <FormControl className="formControl" sx={{ m: 1, minWidth: 120 }}>
-                                <Stack direction="row" spacing={6}>
+                                <Stack direction="column" spacing={3}>
                                     <Stack direction="row" spacing={3} alignItems="center">
                                         <FormLabel style={{ marginBottom: '0.2rem', color: theme.palette.secondary.darker }}>
-                                            Medecin:
+                                            Specialités:
+                                        </FormLabel>
+                                        <Select
+                                            id="specialite_id"
+                                            name="specialite_id"
+                                            value={formik.values.specialite_id ? formik.values.specialite_id.toString() : 'all'}
+                                            onChange={(e) => {
+                                                setSpec(e.target.value);
+                                                formik.handleChange(e);
+                                            }}
+                                            inputProps={{ 'aria-label': 'Without label' }}
+                                        >
+                                            <MenuItem value="all">
+                                                <em>Toutes specialites</em>
+                                            </MenuItem>
+                                            {specialites.map((specialite) => {
+                                                return <MenuItem value={specialite.id.toString()}>{specialite.nom}</MenuItem>;
+                                            })}
+                                        </Select>
+                                    </Stack>
+                                    <Stack direction="row" spacing={3} alignItems="center">
+                                        <FormLabel style={{ marginBottom: '0.2rem', color: theme.palette.secondary.darker }}>
+                                            Medecins:
                                         </FormLabel>
                                         <Select
                                             id="medecin_id"
@@ -264,8 +298,12 @@ const NonConsulte = () => {
                                             <MenuItem disabled value="disabled">
                                                 <em>Selectionner le medecin</em>
                                             </MenuItem>
-                                            {medecins.map((medecin) => {
-                                                return <MenuItem value={medecin.id.toString()}>{medecin.nom}</MenuItem>;
+                                            {med.map((medecin) => {
+                                                // console.log(medecin.specialite_id, spec);
+                                                if (spec && 'all' === spec)
+                                                    return <MenuItem value={medecin.id.toString()}>{medecin.nom}</MenuItem>;
+                                                if (spec && medecin.specialite_id.toString() === spec)
+                                                    return <MenuItem value={medecin.id.toString()}>{medecin.nom}</MenuItem>;
                                             })}
                                         </Select>
                                     </Stack>
@@ -283,6 +321,9 @@ const NonConsulte = () => {
                     </form>
                 </Box>
             </Dialog>
+            <Stack direction="column" alignItems="center">
+                {loading ? <CircularProgress /> : null}
+            </Stack>
             <Box>
                 <TableContainer
                     sx={{

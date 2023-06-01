@@ -93,7 +93,7 @@ class CategorieController extends Controller
                 $image = base64_decode($base64[1]);
                 $filename = 'images/'.time() . '.' . 'png';
                 Storage::put('public/'.$filename, $image);
-                $input['image'] = $filename;
+                $request['image'] = $filename;
         }
 
         $categorie=Categorie::findOrFail($request->id);

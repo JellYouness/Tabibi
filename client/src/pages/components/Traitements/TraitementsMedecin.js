@@ -17,7 +17,8 @@ import {
     Typography,
     Chip,
     TextField,
-    InputAdornment
+    InputAdornment,
+    CircularProgress
 } from '@mui/material';
 import { Add, Search } from '@mui/icons-material';
 
@@ -267,6 +268,9 @@ const TraitemenetsMedecin = () => {
                             ({searchCount} trouvés)
                         </Typography>
                     ) : null}
+                </Stack>
+                <Stack direction="column" alignItems="center">
+                    {loading ? <CircularProgress /> : null}
                 </Stack>
                 <TableContainer
                     sx={{

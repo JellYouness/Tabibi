@@ -15,7 +15,8 @@ import {
     TablePagination,
     TableRow,
     Typography,
-    Chip
+    Chip,
+    CircularProgress
 } from '@mui/material';
 import { Add } from '@mui/icons-material';
 
@@ -212,6 +213,9 @@ const Consulte = () => {
     return (
         <MainCard>
             <Box>
+                <Stack direction="column" alignItems="center">
+                    {loading ? <CircularProgress /> : null}
+                </Stack>
                 <TableContainer
                     sx={{
                         width: '100%',
