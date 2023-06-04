@@ -7,7 +7,6 @@ import Page_2 from "./screens/Page_2";
 import Pat_Login from "./screens/Pat_Login";
 import Doc_Login from "./screens/Doc_Login";
 import Doc_List_Patient from "./screens/Doc_List_Patient";
-import Doc_Patient_Traitment from "./screens/Doc_Patient_Traitment";
 import Doc_Profile from "./screens/Doc_Profile";
 import Doc_Ajout_Traitement from "./screens/Doc_Ajout_Traitement";
 import Pat_Home_Screen from "./screens/Pat_Home_Screen";
@@ -52,10 +51,7 @@ export default function App() {
           name="Doc_Ajout_Traitement"
           component={Doc_Ajout_Traitement}
         />
-        <Stack.Screen
-          name="Doc_Patient_Traitment"
-          component={Doc_Patient_Traitment}
-        />
+
         <Stack.Screen name="Pat_Login" component={Pat_Login} />
         <Stack.Screen name="Pat_Home_Screen" component={Pat_Home_Screen} />
         <Stack.Screen name="Pat_List_Doc" component={Pat_List_Doc} />

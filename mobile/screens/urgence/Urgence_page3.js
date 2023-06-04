@@ -3,9 +3,10 @@ import { AntDesign } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
 import { useState } from "react";
 import { useEffect } from "react";
-import { API_BASE_URL } from "../../IP.js";
+import { API_BASE_URL, API_IMAGE_URL } from "../../IP.js";
 import axios from "axios";
 import moment from "moment";
+import * as SecureStore from "expo-secure-store";
 
 export default function Urgence_page3({ navigation }) {
   const route = useRoute();
@@ -16,8 +17,15 @@ export default function Urgence_page3({ navigation }) {
   useEffect(() => {
     const fetchName = async () => {
       try {
+        const token = await SecureStore.getItemAsync("token");
+
         const response = await axios.get(
-          `${API_BASE_URL}/categories/fk/${id_Route}`
+          `${API_BASE_URL}/categories/fk/${id_Route}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         const data = response.data;
         setCategories(data);
@@ -62,25 +70,29 @@ export default function Urgence_page3({ navigation }) {
           renderItem={({ item }) => (
             <TouchableOpacity
               onPress={() => navigation.navigate("Urgence_page_fin", { item })}
-              className="w-80 mx-4 h-28 m-2  drop-shadow-xl rounded-2xl bg-blue-200"
+              className="w-80 mx-4 h-28 m-2  drop-shadow-xl rounded-2xl bg-[#FF6347]"
             >
               <View className="flex-row flex-1">
-                <Image
-                  source={{
-                    // TODO:Need to change the pic
-                    uri: "https://cdn-icons-png.flaticon.com/512/727/727399.png?w=740&t=st=1685246789~exp=1685247389~hmac=6198d9d8581621936d1df82332ee3fe100c74e15fdf91510bec5addd505b8c71",
-                  }}
-                  className="h-24 w-24 m-2 justify-center rounded-xl"
-                />
+                {item.image ? (
+                  <Image
+                    className="h-24 w-24 m-2 justify-center rounded-xl"
+                    source={{
+                      uri: `${API_IMAGE_URL}/storage/${item.image}`,
+                    }}
+                  />
+                ) : (
+                  <Image
+                    className="h-24 w-24 m-2 justify-center rounded-xl"
+                    source={{
+                      uri: "https://img.freepik.com/free-vector/man-doctor-with-medical-services-icons_24877-51669.jpg?w=740&t=st=1685247369~exp=1685247969~hmac=df8e69f2275b6b12b7dbf4368101ed750ff32910ceafdafbbca4ea91b3710a66",
+                    }}
+                  />
+                )}
                 <View className="justify-center flex-1">
-                  <Text className="text-lg text-black font-semibold">
+                  <Text className="text-lg text-[#333333] font-semibold">
                     {item.libelle}
                   </Text>
-                  <Text
-                    lineBreakMode="clip"
-                    numberOfLines={3}
-                    className=" text-gray-600 text-xs font-light "
-                  >
+                  <Text className=" text-gray-600 text-xs font-light ">
                     <Text className=" text-gray-900 text-sm font-normal ">
                       Last Update :
                     </Text>

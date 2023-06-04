@@ -5,13 +5,13 @@ export default function Page_3({ navigation }) {
     <View
       className="flex-1 flex-col items-center  justify-center mt-4 "
       style={{
-        backgroundColor: "#F6F6F6",
+        backgroundColor: "#F2F7FF",
       }}
     >
       <View
         className=" mx-5 basis-2/3 items-center  justify-center w-full rounded-br-full shadow-md "
         style={{
-          backgroundColor: "#ECF2F3",
+          backgroundColor: "#e8edf5",
           borderBottomLeftRadius: 150,
           borderBottomRightRadius: 150,
         }}
@@ -24,23 +24,20 @@ export default function Page_3({ navigation }) {
       </View>
       <View className="basis-1/3 flex-col items-center  w-full ">
         <Text className="  font-bold mt-6">Choisir</Text>
-        <TouchableOpacity className="  w-60 h-12 justify-center self-center mt-4 shadow-sm bg-cyan-600 rounded-lg"
+        <TouchableOpacity
+          className="  w-60 h-12 justify-center self-center mt-4 shadow-sm bg-[#2ECC71] rounded-lg"
           onPress={() => navigation.navigate("Doc_Login")}
         >
-          <Text
-            className=" self-center text-white text-xl font-bold"
-          >
+          <Text className=" self-center text-white text-xl font-bold">
             Doctor
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity className=" w-60 h-12 justify-center self-center mt-3 shadow-lg bg-pink-500 rounded-lg"
-        
+        <TouchableOpacity
+          className=" w-60 h-12 justify-center self-center mt-3 shadow-lg bg-[#FF5722] rounded-lg"
           onPress={() => navigation.navigate("Pat_Login")}
         >
-          <Text
-            className=" self-center text-white text-xl font-bold"
-          >
-            Patien
+          <Text className=" self-center text-white text-xl font-bold">
+            Patient
           </Text>
         </TouchableOpacity>
       </View>

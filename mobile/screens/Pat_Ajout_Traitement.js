@@ -15,30 +15,37 @@ export default function Pat_Ajout_Traitement({ navigation }) {
 
   const handleCreateTraitement = async () => {
     const id_patient = await SecureStore.getItemAsync("pat_id");
+    const token = await SecureStore.getItemAsync("token");
     if (!id) {
       navigation.navigate("Pat_Login");
     }
     try {
-      const response = await axios.post(`${API_BASE_URL}/traitements`, {
-        date: now,
-        etat: false,
-        description: description,
-        reponse: "",
-        categorie_id: id,
-        patient_id: id_patient,
-      });
-      // console.log(response);
-      // if (response.data.message === "Traitement created successfully") {
-      navigation.navigate("Urgence_page1");
-      // }
+      const response = await axios.post(
+        `${API_BASE_URL}/traitements`,
+        {
+          date: now,
+          etat: false,
+          description: description,
+          reponse: "",
+          categorie_id: id,
+          patient_id: id_patient,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      navigation.navigate("Pat_List_Traitement");
     } catch (error) {
       console.error(error);
     }
   };
 
   return (
-    <View className="flex-1 flex-col items-center mp-4 ">
-      <View className=" flex  bg-[#1C6BA4] w-full px-4 pb-8 rounded-b-3xl drop-shadow-xl flex-row pt-16 justify-between">
+    <View className="flex-1 flex-col bg-white items-center mp-4 ">
+      <View className=" flex  bg-[#0077B6] w-full px-4 pb-8 rounded-b-3xl drop-shadow-xl flex-row pt-16 justify-between">
         <AntDesign
           name="arrowleft"
           size={24}
@@ -46,13 +53,13 @@ export default function Pat_Ajout_Traitement({ navigation }) {
           onPress={() => navigation.goBack()}
         />
         <Text className="text-xl text-white font-extrabold">
-          Ajouter Traitement
+          Ajouter Une Consultation
         </Text>
         <Text className="text-xl text-[#1C6BA4]  font-extrabold">{"jj "}</Text>
       </View>
 
       <View className="mt-16 w-full pl-5">
-        <View className="mx-6 bg-white p-2 rounded-xl">
+        <View className="mx-6 bg-[#f5f5f5] p-2 rounded-xl">
           <View className="mx-3">
             <Text className="mb-2 font-bold">About</Text>
             <View className="flex-row">
@@ -74,9 +81,9 @@ export default function Pat_Ajout_Traitement({ navigation }) {
       </View>
       <View className="flex-col  w-full mt-20">
         <View className="w-full flex-col   ">
-          <Text className="w-fit col-start-1 mx-7 mt-4">Type d'Urgence</Text>
+          <Text className="w-fit col-start-1 mx-7 mt-4">Description </Text>
           <TextInput
-            className="w-80 h-10 bg-white mx-7 rounded-md  shadow-sm border-1 p-2 border-gray-400 "
+            className="w-80 h-10 bg-[#f5f5f5] mx-7 rounded-md  shadow-sm border-1 p-2 border-gray-400 "
             value={description}
             onChangeText={setDescription}
             placeholder="-----"
@@ -85,11 +92,11 @@ export default function Pat_Ajout_Traitement({ navigation }) {
       </View>
       <View className=" mt-14 w-full  items-center">
         <TouchableOpacity
-          className="w-2/3 h-16 bg-[#EEA63A] rounded-xl justify-center items-center"
+          className="w-2/3 h-16 bg-[#0072C6] rounded-xl justify-center items-center"
           onPress={handleCreateTraitement}
         >
           <Text className="text-sm text-white font-semibold">
-            Ajouter Traitement
+            Add your Consultation
           </Text>
         </TouchableOpacity>
       </View>

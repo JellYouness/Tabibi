@@ -19,16 +19,16 @@ export default function Pat_Login({ navigation }) {
   const handelLogin = async () => {
     try {
       const id = await SecureStore.getItemAsync("pat_id");
-      if (!id) {
+      if (id) {
         navigation.navigate("Pat_Home_Screen");
       }
+
       setMessage("");
       if (!email || !password) {
         setMessage("Email and password are required");
         return;
       }
-      // TODO:need to handel user with id medcien or alredy logedin
-      const response = await axios.post(`${API_BASE_URL}/patients/login`, {
+      const response = await axios.post(`${API_BASE_URL}/login`, {
         email: email,
         password: password,
       });
@@ -37,9 +37,15 @@ export default function Pat_Login({ navigation }) {
       if (response.data.error) {
         setMessage("Unauthenticated");
       } else {
-        const id = JSON.stringify(response.data.patient.id);
-        await SecureStore.setItemAsync("pat_id", id);
-        navigation.navigate("Pat_Home_Screen");
+        if (response.data.role === "patient") {
+          const role = JSON.stringify(response.data.role);
+          const id = JSON.stringify(response.data.id);
+          const token = JSON.stringify(response.data.token);
+          await SecureStore.setItemAsync("pat_id", id);
+          await SecureStore.setItemAsync("token", token);
+          await SecureStore.setItemAsync("role", role);
+          await navigation.navigate("Pat_Home_Screen");
+        }
       }
     } catch (error) {
       console.error("Login failed:", error);
@@ -50,21 +56,36 @@ export default function Pat_Login({ navigation }) {
     <View
       className="flex-1 flex-col items-center   mt-4 "
       style={{
-        backgroundColor: "#F6F6F6",
+        backgroundColor: "#FFFFFF",
       }}
     >
       <View className=" mx-5  items-center  justify-center w-full rounded-br-full mb-14 ">
         <View className=" mt-10 self-start ml-5">
-          <AntDesign name="arrowleft" size={24} color="black" />
+          <AntDesign
+            name="arrowleft"
+            size={24}
+            color="black"
+            onPress={() => navigation.goBack()}
+          />
         </View>
-        <Text className="  font-extrabold text-3xl mt-10 ">Tabibi</Text>
-        <Text className="  font-medium text-xl mt-3 ">Login As A Patien</Text>
+        <Text className="  font-extrabold text-3xl mt-10 ">
+          <Text className="  font-extrabold text-4xl mt-10 text-[#0077B6] ">
+            T
+          </Text>
+          abibi
+        </Text>
+        <Text className="  font-medium text-xl mt-3 ">
+          Login As{" "}
+          <Text className="  font-medium text-xl text-[#FF4C4C] mt-3 ">
+            Patient
+          </Text>
+        </Text>
       </View>
       <View className="flex-col  w-full mt-18">
         <View className="w-full flex-col   ">
           <Text className="w-fit col-start-1 mx-7 mt-3">Email Address</Text>
           <TextInput
-            className="w-80 h-10 bg-white mx-7 rounded-md  shadow-sm border-1 p-2 border-gray-400 "
+            className="w-80 h-10 bg-[#f5f5f5] mx-7 rounded-md  shadow-sm border-1 p-2 border-gray-400 "
             placeholder={"example@mail.com"}
             onChangeText={(text) => setEmail(text)}
             value={email}
@@ -85,7 +106,7 @@ export default function Pat_Login({ navigation }) {
           )}
           <Text className="w-fit col-start-1 mx-7 mt-4">Password</Text>
           <TextInput
-            className="w-80 h-10 bg-white mx-7 rounded-md  shadow-sm border-1 p-2 border-gray-400 "
+            className="w-80 h-10 bg-[#e8edf5] mx-7 rounded-md  shadow-sm border-1 p-2 border-gray-400 "
             placeholder={"At least 8 characters"}
             onChangeText={(pass) => setPassword(pass)}
             value={password}
@@ -95,7 +116,7 @@ export default function Pat_Login({ navigation }) {
       </View>
       <View className=" mx-10 mt-32">
         <TouchableOpacity
-          className="mt-3 w-60 h-12 justify-center self-center shadow-lg bg-teal-400 rounded-lg"
+          className="mt-3 w-60 h-12 justify-center self-center shadow-lg bg-[#0077B6] rounded-lg"
           onPress={handelLogin}
         >
           <Text className=" self-center text-white text-xl">Login IN</Text>

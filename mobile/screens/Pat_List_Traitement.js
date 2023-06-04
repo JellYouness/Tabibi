@@ -6,7 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { API_BASE_URL } from "../IP";
+import { API_BASE_URL, API_IMAGE_URL } from "../IP";
 import moment from "moment";
 import * as SecureStore from "expo-secure-store";
 
@@ -17,7 +17,8 @@ export default function Pat_List_Doc({ navigation }) {
   const [data, setData] = useState([]);
   useEffect(() => {
     fetchDataDoctor();
-    const interval = setInterval(fetchDataDoctor, 60000); // Refresh data every 1 minute (adjust as needed)
+
+    const interval = setInterval(fetchDataDoctor, 6000); // Refresh data every 1 minute (adjust as needed)
 
     return () => {
       clearInterval(interval); // Clean up the interval on component unmount
@@ -27,11 +28,17 @@ export default function Pat_List_Doc({ navigation }) {
   const fetchDataDoctor = async () => {
     try {
       const id = await SecureStore.getItemAsync("pat_id");
+      const token = await SecureStore.getItemAsync("token");
       if (!id) {
         navigation.navigate("Pat_Login");
       }
       const response = await axios.get(
-        `${API_BASE_URL}/traitements/patients/${id}`
+        `${API_BASE_URL}/traitements/patients/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       const data = response.data;
       setData(data);
@@ -41,7 +48,7 @@ export default function Pat_List_Doc({ navigation }) {
   };
   return (
     <View className="flex-1  items-center ">
-      <View className=" flex  w-full px-4 pb-3 rounded-b-3xl drop-shadow-xl bg-[#1C6BA4] flex-row pt-10 justify-between">
+      <View className=" flex  w-full px-4 pb-3 rounded-b-3xl drop-shadow-xl bg-[#0072C6] flex-row pt-10 justify-between">
         <AntDesign
           name="arrowleft"
           size={24}
@@ -50,7 +57,7 @@ export default function Pat_List_Doc({ navigation }) {
         />
 
         <Text className="text-xl text-white font-extrabold">
-          List Traitements
+          List des Consultation
         </Text>
 
         <Image
@@ -72,14 +79,35 @@ export default function Pat_List_Doc({ navigation }) {
               className="w-80 mx-4 h-28  m-2 drop-shadow-xl rounded-2xl bg-white"
             >
               <View className="flex-row">
-                <Image
-                  source={{ uri: image }}
-                  className="h-24 w-24 m-2 justify-center rounded-xl"
-                />
+                {item.medecin ? (
+                  item.medecin.image ? (
+                    <Image
+                      className="h-24 w-24 m-2 justify-center rounded-xl"
+                      source={{
+                        uri: `${API_IMAGE_URL}/storage/${item.medecin.image}`,
+                      }}
+                    />
+                  ) : (
+                    <Image
+                      className="h-24 w-24 m-2 justify-center rounded-xl"
+                      source={{
+                        uri: "https://img.freepik.com/free-vector/man-doctor-with-medical-services-icons_24877-51669.jpg?w=740&t=st=1685247369~exp=1685247969~hmac=df8e69f2275b6b12b7dbf4368101ed750ff32910ceafdafbbca4ea91b3710a66",
+                      }}
+                    />
+                  )
+                ) : (
+                  <Image
+                    className="h-24 w-24 m-2 justify-center rounded-xl"
+                    source={{
+                      uri: "https://img.freepik.com/free-vector/man-doctor-with-medical-services-icons_24877-51669.jpg?w=740&t=st=1685247369~exp=1685247969~hmac=df8e69f2275b6b12b7dbf4368101ed750ff32910ceafdafbbca4ea91b3710a66",
+                    }}
+                  />
+                )}
+
                 <View className="justify-center pl-2">
                   <Text className="font-bold text-xl">
                     {item.medecin ? (
-                      <Text>
+                      <Text className="text-[#333333] ">
                         DR. {item.medecin.nom} {item.medecin.prenom}
                       </Text>
                     ) : (
@@ -131,7 +159,7 @@ export default function Pat_List_Doc({ navigation }) {
           <TouchableOpacity
             onPress={() => navigation.navigate("Urgence_page1")}
           >
-            <View className=" bg-[#FF0000] rounded-full h-10 w-10 flex justify-center items-center">
+            <View className=" bg-[#00B4D8] rounded-full h-10 w-10 flex justify-center items-center">
               <AntDesign name="pluscircleo" size={28} color="white" />
             </View>
           </TouchableOpacity>

@@ -1,12 +1,12 @@
-import { Image, Text, View, TouchableOpacity, FlatList } from "react-native";
+import { Image, Text, View, TouchableOpacity } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import { Entypo } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
 import { useState } from "react";
 import { useEffect } from "react";
 import { API_BASE_URL } from "../../IP.js";
 import axios from "axios";
+import * as SecureStore from "expo-secure-store";
+import moment from "moment";
 
 export default function Urgence_page2({ navigation }) {
   const route = useRoute();
@@ -18,8 +18,15 @@ export default function Urgence_page2({ navigation }) {
   useEffect(() => {
     const fetchSoustype = async () => {
       try {
+        const token = await SecureStore.getItemAsync("token");
+
         const response = await axios.get(
-          `${API_BASE_URL}/soustypes/fk/${id_Route}`
+          `${API_BASE_URL}/soustypes/fk/${id_Route}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         const data = response.data;
         setSousTypes(data);
@@ -42,7 +49,7 @@ export default function Urgence_page2({ navigation }) {
       </View>
 
       <View className=" w-full  flex-1 bg-white items-center">
-        <Text className="text-xl items-center text-black font-extrabold mt-20">
+        <Text className="text-xl items-center text-[#333333] font-extrabold mt-20">
           {Urgence_Route.libelle}
         </Text>
         <Text className="text-base items-center text-gray-700 p-6">
@@ -61,9 +68,9 @@ export default function Urgence_page2({ navigation }) {
               <TouchableOpacity
                 key={item.id}
                 onPress={() => navigation.navigate("Urgence_page3", { item })}
-                className="flex-row items-center justify-center shadow-sm bg-blue-300 w-60 h-10 mb-3 rounded-xl"
+                className="flex py-1 items-center justify-center shadow-sm bg-[#FF6347] w-60 h-14 mb-3 rounded-xl"
               >
-                <Text className="text-xl items-center text-black font-semibold ">
+                <Text className="text-xl items-center text-white font-semibold ">
                   {item.libelle}
                 </Text>
               </TouchableOpacity>

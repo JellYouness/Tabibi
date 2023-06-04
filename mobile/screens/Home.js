@@ -1,18 +1,16 @@
 import { Image, Text, View, TouchableOpacity } from "react-native";
-import { useState } from "react";
 export default function Home({ navigation }) {
-
   return (
     <View
       className="flex-1 flex-col items-center  justify-center mt-4 "
       style={{
-        backgroundColor: "#F6F6F6",
+        backgroundColor: "#F2F7FF",
       }}
     >
       <View
         className=" mx-5 basis-2/3 items-center  justify-center w-full rounded-br-full shadow-md "
         style={{
-          backgroundColor: "#ECF2F3",
+          backgroundColor: "#e8edf5",
           borderBottomLeftRadius: 150,
           borderBottomRightRadius: 150,
         }}
@@ -31,7 +29,7 @@ export default function Home({ navigation }) {
           Votre meilleur assistant médical
         </Text>
         <TouchableOpacity
-          className="absolute bottom-10 w-60 h-12 justify-center self-center mt-8 shadow-lg bg-cyan-600 rounded-lg"
+          className="absolute bottom-10 w-60 h-12 justify-center self-center mt-8 shadow-lg bg-[#00BFFF]  rounded-lg"
           onPress={() => navigation.navigate("Page_2")}
         >
           <Text className=" self-center text-white text-xl font-bold">

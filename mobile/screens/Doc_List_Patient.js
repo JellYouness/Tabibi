@@ -5,7 +5,7 @@ import { AntDesign } from "@expo/vector-icons";
 export default function Doc_List_Patient({ navigation }) {
   return (
     <View className="flex-1  items-center ">
-      <View className=" flex  w-full px-4 pb-3 rounded-b-3xl drop-shadow-xl bg-[#1C6BA4] flex-row pt-10 justify-between">
+      <View className=" flex  w-full px-4 pb-3 rounded-b-3xl drop-shadow-xl bg-[#00B894] flex-row pt-10 justify-between">
         <AntDesign
           name="arrowleft"
           size={24}
@@ -33,7 +33,7 @@ export default function Doc_List_Patient({ navigation }) {
           <TouchableOpacity
             onPress={() => navigation.navigate("Doc_List_Patient")}
           >
-            <View className=" bg-[#E64646] rounded-full h-10 w-10 flex justify-center items-center">
+            <View className=" bg-[#00B894] rounded-full h-10 w-10 flex justify-center items-center">
               <AntDesign name="pluscircleo" size={28} color="white" />
             </View>
           </TouchableOpacity>

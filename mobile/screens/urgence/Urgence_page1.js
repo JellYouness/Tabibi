@@ -4,7 +4,7 @@ import { Entypo } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import { useEffect } from "react";
-import { API_BASE_URL } from "../../IP.js";
+import { API_BASE_URL, API_IMAGE_URL } from "../../IP.js";
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 
@@ -15,10 +15,15 @@ export default function Urgence_page1({ navigation }) {
     const fetchName = async () => {
       try {
         const id = await SecureStore.getItemAsync("pat_id");
+        const token = await SecureStore.getItemAsync("token");
         if (!id) {
           navigation.navigate("Pat_Login");
         }
-        const response = await axios.get(`${API_BASE_URL}/urgences`);
+        const response = await axios.get(`${API_BASE_URL}/urgences`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         const data = response.data;
         setUrgences(data);
       } catch (error) {
@@ -31,7 +36,7 @@ export default function Urgence_page1({ navigation }) {
 
   return (
     <View className="flex-1  items-center ">
-      <View className=" flex  w-full px-4 pb-3 rounded-b-3xl drop-shadow-xl bg-white flex-row pt-10 justify-between">
+      <View className=" flex  w-full px-4 pb-3 rounded-b-3xl drop-shadow-xl bg-[#0072C6] flex-row pt-10 justify-between">
         <AntDesign
           name="arrowleft"
           size={24}
@@ -39,7 +44,7 @@ export default function Urgence_page1({ navigation }) {
           onPress={() => navigation.goBack()}
         />
 
-        <Text className="text-xl text-black font-extrabold">Les Urgences</Text>
+        <Text className="text-xl text-white font-extrabold">Les Urgences</Text>
 
         <Image
           source={require("../../assets/Logo-Doc.png")}
@@ -50,6 +55,7 @@ export default function Urgence_page1({ navigation }) {
       <View className=" flex  justify-between ">
         <FlatList
           //list des traitement render
+          className="mb-40"
           data={urgences}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
@@ -58,12 +64,21 @@ export default function Urgence_page1({ navigation }) {
               className="w-80 mx-4 h-28 m-2  drop-shadow-xl rounded-2xl bg-white"
             >
               <View className="flex-row flex-1">
-                <Image
-                  source={{
-                    uri: "https://cdn-icons-png.flaticon.com/512/727/727399.png?w=740&t=st=1685246789~exp=1685247389~hmac=6198d9d8581621936d1df82332ee3fe100c74e15fdf91510bec5addd505b8c71",
-                  }}
-                  className="h-24 w-24 m-2 justify-center rounded-xl"
-                />
+                {item.image ? (
+                  <Image
+                    className="h-24 w-24 m-2 justify-center rounded-xl"
+                    source={{
+                      uri: `${API_IMAGE_URL}/storage/${ item.image}`,
+                    }}
+                  />
+                ) : (
+                  <Image
+                    className="h-24 w-24 m-2 justify-center rounded-xl"
+                    source={{
+                      uri: "https://img.freepik.com/free-vector/man-doctor-with-medical-services-icons_24877-51669.jpg?w=740&t=st=1685247369~exp=1685247969~hmac=df8e69f2275b6b12b7dbf4368101ed750ff32910ceafdafbbca4ea91b3710a66",
+                    }}
+                  />
+                )}
                 <View className="justify-center flex-1">
                   <Text className="text-lg text-black font-semibold">
                     Libelle : {item.libelle}
@@ -99,7 +114,7 @@ export default function Urgence_page1({ navigation }) {
           <TouchableOpacity
             onPress={() => navigation.navigate("Urgence_page1")}
           >
-            <View className=" bg-[#FF0000] rounded-full h-10 w-10 flex justify-center items-center">
+            <View className=" bg-[#00B4D8] rounded-full h-10 w-10 flex justify-center items-center">
               <AntDesign name="pluscircleo" size={28} color="white" />
             </View>
           </TouchableOpacity>

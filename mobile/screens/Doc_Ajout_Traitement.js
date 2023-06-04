@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  Linking,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
@@ -18,10 +19,30 @@ export default function Doc_Ajout_Traitement({ navigation }) {
   const route = useRoute();
   const data = route.params;
 
+  const phoneNumber = data.patient.telephone; // Numéro de téléphone statique
+
+  const openWhatsApp = () => {
+    // Construct the WhatsApp URL with the phone number
+    const url = `whatsapp://send?phone=${phoneNumber}`;
+    // Open the WhatsApp URL
+    Linking.openURL(url);
+  };
+
+  const handlePhoneCall = () => {
+    Linking.openURL(`tel:${phoneNumber}`).catch((error) =>
+      console.log(
+        "Erreur lors de l'ouverture de l'application d'appel :",
+        error
+      )
+    );
+  };
+
   const handleResponse = async () => {
     try {
       const storedId = await SecureStore.getItemAsync("med_id");
-      if (!storedId) {
+      const token = await SecureStore.getItemAsync("token");
+      const role = await SecureStore.getItemAsync("role");
+      if (!storedId || !token || !role) {
         navigation.navigate("Doc_Login");
       }
       const respon = await axios.put(
@@ -32,6 +53,11 @@ export default function Doc_Ajout_Traitement({ navigation }) {
         },
         {
           withCredentials: true,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       navigation.navigate("Doc_List_Patient");
@@ -41,6 +67,7 @@ export default function Doc_Ajout_Traitement({ navigation }) {
   };
   const handleRfuseResponse = async () => {
     try {
+      const token = await SecureStore.getItemAsync("token");
       const response = await axios.put(
         `${API_BASE_URL}/traitements/${data.id}`,
         {
@@ -49,6 +76,11 @@ export default function Doc_Ajout_Traitement({ navigation }) {
         },
         {
           withCredentials: true,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       navigation.navigate("Doc_List_Patient");
@@ -58,7 +90,7 @@ export default function Doc_Ajout_Traitement({ navigation }) {
   };
   return (
     <View className="flex-1 flex-col items-center mp-4 ">
-      <View className=" flex  bg-[#1C6BA4] w-full px-4 pb-8 rounded-b-3xl drop-shadow-xl flex-row pt-16 justify-between">
+      <View className=" flex  bg-[#00B894] w-full px-4 pb-8 rounded-b-3xl drop-shadow-xl flex-row pt-16 justify-between">
         <AntDesign
           name="arrowleft"
           size={24}
@@ -68,9 +100,9 @@ export default function Doc_Ajout_Traitement({ navigation }) {
         <Text className="text-xl text-white font-extrabold">
           Ajouter Traitement
         </Text>
-        <Text className="text-xl text-[#1C6BA4]  font-extrabold">{"jj "}</Text>
+        <Text className="text-xl text-[#00B894]  font-extrabold">{"jj "}</Text>
       </View>
-      <ScrollView className="mt-4  w-full ">
+      <ScrollView className="mt-4 py-3 w-full ">
         <View className=" bg-white p-2 mx-5 rounded-xl">
           <View className="mx-3">
             <Text className="mb-2 font-bold">About</Text>
@@ -105,7 +137,7 @@ export default function Doc_Ajout_Traitement({ navigation }) {
                   {data.reponse}
                 </Text>
               ) : (
-                <Text className="font-light text-gray-500 text-sm">
+                <Text className="font-bold text-[#FF4136] text-sm ">
                   Waiting
                 </Text>
               )}
@@ -116,10 +148,24 @@ export default function Doc_Ajout_Traitement({ navigation }) {
 
       {!data.reponse ? (
         <>
+          <View className="flex-row items-center justify-evenly  ">
+            <TouchableOpacity onPress={handlePhoneCall}>
+              <Image
+                className="w-10 h-10 mx-5"
+                source={require("../assets/pngegg.png")}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={openWhatsApp}>
+              <Image
+                className="w-10 h-10 mx-5"
+                source={require("../assets/whatsapp.png")}
+              />
+            </TouchableOpacity>
+          </View>
           <View className="flex-col  w-full mt-4">
             <View className="w-full flex-col   ">
               <Text className="w-fit col-start-1 mx-7 mt-3">
-                Reponse de Traitement
+                Reponse of the Consultation
               </Text>
               <TextInput
                 className="w-80 h-20 bg-white mx-7 rounded-md  shadow-sm border-1 p-2 border-gray-400 "
@@ -132,19 +178,17 @@ export default function Doc_Ajout_Traitement({ navigation }) {
           <View className=" mt-4 w-full mb-10 items-center">
             <TouchableOpacity
               onPress={handleResponse}
-              className="w-2/3 h-16 bg-[#EEA63A] rounded-xl justify-center items-center"
+              className="w-2/3 h-16 bg-[#2a9235] rounded-xl justify-center items-center"
             >
               <Text className="text-sm text-white font-semibold">
-                Ajouter Traitement
+                Add response
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={handleRfuseResponse}
-              className="w-2/3 h-16 mt-3 bg-red-500 rounded-xl justify-center items-center"
+              className="w-2/3 h-16 mt-3 bg-[#FF4136] rounded-xl justify-center items-center"
             >
-              <Text className="text-sm text-white font-semibold">
-                Refuser Traitement
-              </Text>
+              <Text className="text-sm text-white font-semibold">Refuse</Text>
             </TouchableOpacity>
           </View>
         </>

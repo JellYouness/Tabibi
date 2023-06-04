@@ -7,7 +7,7 @@ import { Ionicons } from "@expo/vector-icons";
 export default function Pat_List_Doc({ navigation }) {
   return (
     <View className="flex-1  items-center ">
-      <View className=" flex  w-full px-4 pb-3 rounded-b-3xl drop-shadow-xl bg-[#1C6BA4] flex-row pt-10 justify-between">
+      <View className=" flex  w-full px-4 pb-3 rounded-b-3xl drop-shadow-xl bg-[#0072C6] flex-row pt-10 justify-between">
         <AntDesign
           name="arrowleft"
           size={24}
@@ -23,7 +23,7 @@ export default function Pat_List_Doc({ navigation }) {
         />
       </View>
       <View className=" flex  justify-between">
-        <List_Doc navigation={navigation} className="pb-14 bg-[#FF0000]" />
+        <List_Doc navigation={navigation} className="pb-14 bg-[#00B4D8]" />
       </View>
 
       <View className="absolute -bottom-0 self-center bg-white rounded-2xl h-14 p-3 w-full ">
@@ -40,7 +40,7 @@ export default function Pat_List_Doc({ navigation }) {
           <TouchableOpacity
             onPress={() => navigation.navigate("Urgence_page1")}
           >
-            <View className=" bg-[#FF0000] rounded-full h-10 w-10 flex justify-center items-center">
+            <View className=" bg-[#00B4D8] rounded-full h-10 w-10 flex justify-center items-center">
               <AntDesign name="pluscircleo" size={28} color="white" />
             </View>
           </TouchableOpacity>

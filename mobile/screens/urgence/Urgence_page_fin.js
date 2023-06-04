@@ -10,21 +10,27 @@ import { AntDesign } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
 import { useState } from "react";
 import { useEffect } from "react";
-import { API_BASE_URL } from "../../IP.js";
+import { API_BASE_URL, API_IMAGE_URL } from "../../IP.js";
 import axios from "axios";
-import { Button } from "react-native-web";
+import * as SecureStore from "expo-secure-store";
 
 export default function Urgence_page_fin({ navigation }) {
   const route = useRoute();
   const id_Route = route.params.item.id;
   const [urgence, setUrgence] = useState({});
 
-  
   useEffect(() => {
     const fetchName = async () => {
       try {
+        const token = await SecureStore.getItemAsync("token");
+
         const response = await axios.get(
-          `${API_BASE_URL}/categories/${id_Route}`
+          `${API_BASE_URL}/categories/${id_Route}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         const data = response.data.data;
         setUrgence(data);
@@ -51,12 +57,22 @@ export default function Urgence_page_fin({ navigation }) {
         <Text className="text-xl items-center mb-3 text-gray-900 font-extrabold ">
           {urgence.libelle}
         </Text>
-        <Image
-          source={{
-            uri: "https://cdn-icons-png.flaticon.com/512/727/727399.png?w=740&t=st=1685246789~exp=1685247389~hmac=6198d9d8581621936d1df82332ee3fe100c74e15fdf91510bec5addd505b8c71",
-          }}
-          className="h-64 w-4/5 justify-center rounded-xl"
-        />
+        {urgence.image ? (
+          <Image
+            className="h-64 w-4/5 justify-center rounded-xl"
+            source={{
+              uri: `${API_IMAGE_URL}/storage/${urgence.image}`,
+            }}
+          />
+        ) : (
+          <Image
+            className="h-64 w-4/5 justify-center rounded-xl"
+            source={{
+              uri: "https://img.freepik.com/free-vector/man-doctor-with-medical-services-icons_24877-51669.jpg?w=740&t=st=1685247369~exp=1685247969~hmac=df8e69f2275b6b12b7dbf4368101ed750ff32910ceafdafbbca4ea91b3710a66",
+            }}
+          />
+        )}
+
         <ScrollView className="">
           <Text className="text-base items-center  text-gray-700 p-6 ">
             {urgence.description}
@@ -65,7 +81,7 @@ export default function Urgence_page_fin({ navigation }) {
             onPress={() =>
               navigation.navigate("Pat_Ajout_Traitement", { urgence })
             }
-            className="self-center flex-row items-center justify-center p-3 shadow-sm bg-emerald-400 w-60  mb-3 rounded-xl"
+            className="self-center flex-row items-center justify-center p-3 shadow-sm bg-[#6ABD9B] w-60  mb-3 rounded-xl"
           >
             <Text className="font-bold text-lg ">Consult Now</Text>
             <AntDesign name="doubleright" size={24} color="black" />
