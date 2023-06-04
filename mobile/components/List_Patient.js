@@ -10,7 +10,7 @@ import {
 import React, { useEffect } from "react";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useState } from "react";
-import { API_BASE_URL } from "../IP";
+import { API_BASE_URL, API_IMAGE_URL } from "../IP";
 import axios from "axios";
 import moment from "moment";
 import { AntDesign } from "@expo/vector-icons";
@@ -37,11 +37,18 @@ export default function List_Patient({ navigation }) {
   const fetchTraitementDoctor = async () => {
     try {
       const storedId = await SecureStore.getItemAsync("med_id");
-      if (!storedId) {
+      const role = await SecureStore.getItemAsync("role");
+      if (!storedId || !role) {
         navigation.navigate("Doc_Login");
       }
+      const token = await SecureStore.getItemAsync("token");
       const response = await axios.get(
-        `${API_BASE_URL}/traitements/medecins/${storedId}`
+        `${API_BASE_URL}/traitements/medecins/${storedId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       const data = response.data;
       setData(data);
@@ -61,15 +68,31 @@ export default function List_Patient({ navigation }) {
             onPress={() => navigation.navigate("Doc_Ajout_Traitement", item)}
           >
             <TouchableOpacity name="HELLOOO">
-              <Image
-                style={{
-                  width: 70,
-                  height: 70,
-                  resizeMode: "contain",
-                  borderRadius: 15,
-                }}
-                source={{ uri: image }}
-              />
+              {item.patient.image ? (
+                <Image
+                  style={{
+                    width: 70,
+                    height: 70,
+                    resizeMode: "contain",
+                    borderRadius: 15,
+                  }}
+                  source={{
+                    uri: `${API_IMAGE_URL}/storage/${item.patient.image}`,
+                  }}
+                />
+              ) : (
+                <Image
+                  style={{
+                    width: 70,
+                    height: 70,
+                    resizeMode: "contain",
+                    borderRadius: 15,
+                  }}
+                  source={{
+                    uri: image,
+                  }}
+                />
+              )}
             </TouchableOpacity>
 
             <View style={styles.chatTextContainer}>

@@ -9,9 +9,10 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { API_BASE_URL } from "../IP.js";
+import { API_BASE_URL, API_IMAGE_URL } from "../IP.js";
 import moment from "moment";
 const WIDTH = Dimensions.get("window").width - 30;
+import * as SecureStore from "expo-secure-store";
 
 export default function List_Doc({ navigation }) {
   const [Docs, setDocs] = useState([]);
@@ -19,7 +20,13 @@ export default function List_Doc({ navigation }) {
   useEffect(() => {
     const fetchDataDoctor = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/medecins`);
+        const token = await SecureStore.getItemAsync("token");
+
+        const response = await axios.get(`${API_BASE_URL}/medecins`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         const data = response.data;
         setDocs(data);
       } catch (error) {
@@ -41,18 +48,29 @@ export default function List_Doc({ navigation }) {
             style={styles.chatContainer}
             onPress={() => navigation.navigate("Pat_Med_Profile", { item })}
           >
-            <Image
-              style={{
-                width: 84,
-                height: 89,
-                resizeMode: "contain",
-                borderRadius: 15,
-              }}
-              source={{
-                // uri: "https://img.freepik.com/free-vector/doctor-with-glasses-holding-clipboard_23-2147791170.jpg?w=996&t=st=1681957637~exp=1681958237~hmac=5debf22db2a6a5c9a4ea3ec44983b4079f8172169478a52917ef5958003205fe",
-                uri: "https://img.freepik.com/free-vector/man-doctor-with-medical-services-icons_24877-51669.jpg?w=740&t=st=1685247369~exp=1685247969~hmac=df8e69f2275b6b12b7dbf4368101ed750ff32910ceafdafbbca4ea91b3710a66",
-              }}
-            />
+            {item.image ? (
+              <Image
+                style={{
+                  width: 84,
+                  height: 89,
+                  resizeMode: "contain",
+                  borderRadius: 15,
+                }}
+                source={{ uri: `${API_IMAGE_URL}/storage/${item.image}` }}
+              />
+            ) : (
+              <Image
+                style={{
+                  width: 84,
+                  height: 89,
+                  resizeMode: "contain",
+                  borderRadius: 15,
+                }}
+                source={{
+                  uri: "https://img.freepik.com/free-vector/man-doctor-with-medical-services-icons_24877-51669.jpg?w=740&t=st=1685247369~exp=1685247969~hmac=df8e69f2275b6b12b7dbf4368101ed750ff32910ceafdafbbca4ea91b3710a66",
+                }}
+              />
+            )}
 
             <View style={styles.chatTextContainer}>
               <View style={styles.chatTextTop}>
@@ -106,7 +124,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 17,
     fontWeight: "bold",
-    color: "black",
+    color: "#333333",
   },
   join: {
     fontSize: 15,
@@ -119,6 +137,6 @@ const styles = StyleSheet.create({
   msg: {
     marginLeft: 5,
     fontSize: 13,
-    color: "darkgray",
+    color: "#5c5c5c",
   },
 });
