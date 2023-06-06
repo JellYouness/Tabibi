@@ -27,7 +27,7 @@ export default function List_Patient({ navigation }) {
   useEffect(() => {
     fetchTraitementDoctor();
     // TODO:Change it to 600
-    const interval = setInterval(fetchTraitementDoctor, 6000); // Refresh data every 1 minute (adjust as needed)
+    const interval = setInterval(fetchTraitementDoctor, 600); // Refresh data every 1 minute (adjust as needed)
 
     return () => {
       clearInterval(interval); // Clean up the interval on component unmount
@@ -53,7 +53,7 @@ export default function List_Patient({ navigation }) {
       const data = response.data;
       setData(data);
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     }
   };
   return (

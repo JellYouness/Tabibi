@@ -57,7 +57,7 @@ export default function Pat_List_Doc({ navigation }) {
         />
 
         <Text className="text-xl text-white font-extrabold">
-          List des Consultation
+          List Of Consultations
         </Text>
 
         <Image

@@ -62,17 +62,17 @@ export default function Doc_Ajout_Traitement({ navigation }) {
       );
       navigation.navigate("Doc_List_Patient");
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     }
   };
-  const handleRfuseResponse = async () => {
+
+  const handleAcceptResponse = async () => {
     try {
       const token = await SecureStore.getItemAsync("token");
       const response = await axios.put(
         `${API_BASE_URL}/traitements/${data.id}`,
         {
-          medecin_id: 0,
-          etat: false,
+          etat: 2,
         },
         {
           withCredentials: true,
@@ -85,7 +85,31 @@ export default function Doc_Ajout_Traitement({ navigation }) {
       );
       navigation.navigate("Doc_List_Patient");
     } catch (error) {
-      console.error(error);
+      // console.error(error);
+    }
+  };
+
+  const handleRfuseResponse = async () => {
+    try {
+      const token = await SecureStore.getItemAsync("token");
+      const response = await axios.put(
+        `${API_BASE_URL}/traitements/${data.id}`,
+        {
+          medecin_id: 0,
+          etat: 0,
+        },
+        {
+          withCredentials: true,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      navigation.navigate("Doc_List_Patient");
+    } catch (error) {
+      // console.error(error);
     }
   };
   return (
@@ -97,9 +121,7 @@ export default function Doc_Ajout_Traitement({ navigation }) {
           color="white"
           onPress={() => navigation.goBack()}
         />
-        <Text className="text-xl text-white font-extrabold">
-          Ajouter Traitement
-        </Text>
+        <Text className="text-xl text-white font-extrabold">Add Response</Text>
         <Text className="text-xl text-[#00B894]  font-extrabold">{"jj "}</Text>
       </View>
       <ScrollView className="mt-4 py-3 w-full ">
@@ -148,48 +170,65 @@ export default function Doc_Ajout_Traitement({ navigation }) {
 
       {!data.reponse ? (
         <>
-          <View className="flex-row items-center justify-evenly  ">
-            <TouchableOpacity onPress={handlePhoneCall}>
-              <Image
-                className="w-10 h-10 mx-5"
-                source={require("../assets/pngegg.png")}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={openWhatsApp}>
-              <Image
-                className="w-10 h-10 mx-5"
-                source={require("../assets/whatsapp.png")}
-              />
-            </TouchableOpacity>
-          </View>
-          <View className="flex-col  w-full mt-4">
-            <View className="w-full flex-col   ">
-              <Text className="w-fit col-start-1 mx-7 mt-3">
-                Reponse of the Consultation
-              </Text>
-              <TextInput
-                className="w-80 h-20 bg-white mx-7 rounded-md  shadow-sm border-1 p-2 border-gray-400 "
-                placeholder={"---Reponse---"}
-                value={response}
-                onChangeText={setResponse}
-              />
-            </View>
-          </View>
           <View className=" mt-4 w-full mb-10 items-center">
-            <TouchableOpacity
-              onPress={handleResponse}
-              className="w-2/3 h-16 bg-[#2a9235] rounded-xl justify-center items-center"
-            >
-              <Text className="text-sm text-white font-semibold">
-                Add response
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={handleRfuseResponse}
-              className="w-2/3 h-16 mt-3 bg-[#FF4136] rounded-xl justify-center items-center"
-            >
-              <Text className="text-sm text-white font-semibold">Refuse</Text>
-            </TouchableOpacity>
+            {data.etat === 2 ? (
+              <>
+                <View className="flex-row items-center justify-evenly  ">
+                  <TouchableOpacity onPress={handlePhoneCall}>
+                    <Image
+                      className="w-10 h-10 mx-5"
+                      source={require("../assets/pngegg.png")}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={openWhatsApp}>
+                    <Image
+                      className="w-10 h-10 mx-5"
+                      source={require("../assets/whatsapp.png")}
+                    />
+                  </TouchableOpacity>
+                </View>
+                <View className="flex-col  w-full mt-4">
+                  <View className="w-full flex-col   ">
+                    <Text className="w-fit col-start-1 mx-7 mt-3">
+                      Reponse of the Consultation
+                    </Text>
+                    <TextInput
+                      className="w-80 h-20 bg-white mx-7 rounded-md  shadow-sm border-1 p-2 border-gray-400 "
+                      placeholder={"---Reponse---"}
+                      value={response}
+                      onChangeText={setResponse}
+                    />
+                  </View>
+                </View>
+                <TouchableOpacity
+                  onPress={handleResponse}
+                  className="w-2/3 h-16 bg-[#2a9235] rounded-xl justify-center items-center"
+                >
+                  <Text className="text-sm text-white font-semibold">
+                    Add response
+                  </Text>
+                </TouchableOpacity>
+              </>
+            ) : (
+              <>
+                <TouchableOpacity
+                  onPress={handleAcceptResponse}
+                  className="w-2/3 h-16 mt-3 bg-[#2a9235] rounded-xl justify-center items-center"
+                >
+                  <Text className="text-sm text-white font-semibold">
+                    Accepter
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={handleRfuseResponse}
+                  className="w-2/3 h-16 mt-3 bg-[#FF4136] rounded-xl justify-center items-center"
+                >
+                  <Text className="text-sm text-white font-semibold">
+                    Refuse
+                  </Text>
+                </TouchableOpacity>
+              </>
+            )}
           </View>
         </>
       ) : (

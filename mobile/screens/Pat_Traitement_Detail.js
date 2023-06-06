@@ -109,7 +109,7 @@ export default function Pat_Traitement_Detail({ navigation }) {
                   <Text className="font-semibold text-red-800 text-base">
                     {"  "}
                     <AntDesign name="warning" size={22} color="red" />
-                    {"  "}Waiting for a Doctor
+                    {"  "}Waiting for a Response
                   </Text>
                 )}
               </Text>
