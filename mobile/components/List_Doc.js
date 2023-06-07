@@ -30,7 +30,7 @@ export default function List_Doc({ navigation }) {
         const data = response.data;
         setDocs(data);
       } catch (error) {
-        console.error(error);
+        // console.error(error);
       }
     };
     fetchDataDoctor();

@@ -12,11 +12,11 @@ export default function Doc_Profile({ navigation }) {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
+        const storedId = await SecureStore.getItemAsync("med_id");
         const role = await SecureStore.getItemAsync("role");
-        if (!role) {
+        if (!storedId || role === "patient") {
           navigation.navigate("Doc_Login");
         }
-        const storedId = await SecureStore.getItemAsync("med_id");
         const token = await SecureStore.getItemAsync("token");
         const response = await axios.get(
           `${API_BASE_URL}/medecins/${storedId}`,

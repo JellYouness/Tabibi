@@ -18,7 +18,7 @@ export default function Pat_List_Doc({ navigation }) {
   useEffect(() => {
     fetchDataDoctor();
 
-    const interval = setInterval(fetchDataDoctor, 6000); // Refresh data every 1 minute (adjust as needed)
+    const interval = setInterval(fetchDataDoctor, 2000); // Refresh data every 1 seconde (adjust as needed)
 
     return () => {
       clearInterval(interval); // Clean up the interval on component unmount

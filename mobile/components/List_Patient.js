@@ -27,7 +27,7 @@ export default function List_Patient({ navigation }) {
   useEffect(() => {
     fetchTraitementDoctor();
     // TODO:Change it to 600
-    const interval = setInterval(fetchTraitementDoctor, 600); // Refresh data every 1 minute (adjust as needed)
+    const interval = setInterval(fetchTraitementDoctor, 2000); // Refresh data every 1 minute (adjust as needed)
 
     return () => {
       clearInterval(interval); // Clean up the interval on component unmount
@@ -38,7 +38,7 @@ export default function List_Patient({ navigation }) {
     try {
       const storedId = await SecureStore.getItemAsync("med_id");
       const role = await SecureStore.getItemAsync("role");
-      if (!storedId || !role) {
+      if (!storedId || role === "patient") {
         navigation.navigate("Doc_Login");
       }
       const token = await SecureStore.getItemAsync("token");
@@ -56,6 +56,7 @@ export default function List_Patient({ navigation }) {
       // console.error(error);
     }
   };
+
   return (
     <View>
       <FlatList

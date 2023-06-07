@@ -47,7 +47,7 @@ export default function Pat_Home_Screen({ navigation }) {
         const data = response.data;
         setTraitement(data[0]);
       } catch (error) {
-        console.error(error);
+        // console.error(error);
       }
     };
 
@@ -110,12 +110,14 @@ export default function Pat_Home_Screen({ navigation }) {
                   {traitement.description}
                 </Text>
 
-                {traitement.response ? (
-                  <Text className="text-gray-400 text-xs w-44">
-                    {traitement.response}
+                {traitement.reponse ? (
+                  <Text className="text-gray-400 text-xs w-64">
+                    {traitement.reponse}
                   </Text>
                 ) : (
-                  <Text className="text-red-400 text-xs ">No response yet</Text>
+                  <Text className="text-red-400 text-xl w-64">
+                    No response yet
+                  </Text>
                 )}
                 <Text className="text-gray-400 text-xs">
                   {moment(traitement.created_at).format("HH:mm:ss")}

@@ -36,7 +36,7 @@ export default function Pat_Traitement_Detail({ navigation }) {
         />
       </View>
 
-      {data.reponse ? (
+      {data.reponse && data.medecin_id !== 0 ? (
         <View className=" items-center mt-5 mx-5 drop-shadow-2xl">
           <View className="flex-row max-h-24 w-full  items-center mt-3 bg-white border-white rounded-xl border-2 drop-shadow-2xl">
             {data.medecin.image ? (
@@ -45,6 +45,7 @@ export default function Pat_Traitement_Detail({ navigation }) {
                 source={{
                   uri: `${API_IMAGE_URL}/storage/${data.medecin.image}`,
                 }}
+                x
               />
             ) : (
               <Image

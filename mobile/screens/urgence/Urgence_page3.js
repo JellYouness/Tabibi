@@ -55,13 +55,7 @@ export default function Urgence_page3({ navigation }) {
         <Text className="text-base items-center text-gray-700 p-6 ">
           {SousTypes_Route.description}
         </Text>
-        {categories.length ? (
-          <></>
-        ) : (
-          <Text className="text-3xl font-semibold mt-16 items-center text-red-700 p-6 ">
-            Sous Type Empty
-          </Text>
-        )}
+
         <FlatList
           //list des traitement render
           className="bg-white"
@@ -70,7 +64,7 @@ export default function Urgence_page3({ navigation }) {
           renderItem={({ item }) => (
             <TouchableOpacity
               onPress={() => navigation.navigate("Urgence_page_fin", { item })}
-              className="w-80 mx-4 h-28 m-2  drop-shadow-xl rounded-2xl bg-[#FF6347]"
+              className="w-80 mx-4 h-28 m-2  drop-shadow-xl rounded-2xl bg-[#00B4D8]"
             >
               <View className="flex-row flex-1">
                 {item.image ? (

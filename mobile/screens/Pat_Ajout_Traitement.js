@@ -39,7 +39,7 @@ export default function Pat_Ajout_Traitement({ navigation }) {
 
       navigation.navigate("Pat_List_Traitement");
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     }
   };
 
@@ -53,7 +53,7 @@ export default function Pat_Ajout_Traitement({ navigation }) {
           onPress={() => navigation.goBack()}
         />
         <Text className="text-xl text-white font-extrabold">
-          Ajouter Une Consultation
+          Add Consultation
         </Text>
         <Text className="text-xl text-[#1C6BA4]  font-extrabold">{"jj "}</Text>
       </View>

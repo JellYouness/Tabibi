@@ -48,7 +48,7 @@ export default function Pat_Login({ navigation }) {
         }
       }
     } catch (error) {
-      console.error("Login failed:", error);
+      // console.error("Login failed:", error);
     }
   };
 

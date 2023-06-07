@@ -22,7 +22,7 @@ export default function Pat_Profile({ navigation }) {
       const response = await axios.get(`${API_BASE_URL}/patients/${id}`);
       setUserInfo(response.data.data);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
   const handelLogOut = async () => {

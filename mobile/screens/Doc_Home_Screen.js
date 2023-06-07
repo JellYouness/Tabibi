@@ -12,7 +12,7 @@ export default function Doc_Home_Screeen({ navigation }) {
         navigation.navigate("Doc_Login");
       }
     };
-    // fetch();
+    fetch();
   }, []);
 
   return (

@@ -3,7 +3,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
 import { useState } from "react";
 import { useEffect } from "react";
-import { API_BASE_URL } from "../../IP.js";
+import { API_BASE_URL, API_IMAGE_URL } from "../../IP.js";
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 import moment from "moment";
@@ -52,23 +52,23 @@ export default function Urgence_page2({ navigation }) {
         <Text className="text-xl items-center text-[#333333] font-extrabold mt-20">
           {Urgence_Route.libelle}
         </Text>
+        <Image
+          className="h-24 w-24 m-2 justify-center rounded-xl"
+          source={{
+            uri: `${API_IMAGE_URL}/storage/${Urgence_Route.image}`,
+          }}
+        />
         <Text className="text-base items-center text-gray-700 p-6">
           {Urgence_Route.description}
         </Text>
-        {sousTypes.length ? (
-          <></>
-        ) : (
-          <Text className="text-3xl font-semibold mt-16 items-center text-red-700 p-6 ">
-            Sous Type Empty
-          </Text>
-        )}
+
         <View className=" flex-1">
           {sousTypes.map((item) => {
             return (
               <TouchableOpacity
                 key={item.id}
                 onPress={() => navigation.navigate("Urgence_page3", { item })}
-                className="flex py-1 items-center justify-center shadow-sm bg-[#FF6347] w-60 h-14 mb-3 rounded-xl"
+                className="flex py-1 items-center justify-center shadow-sm bg-[#00B4D8] w-60 h-14 mb-3 rounded-xl"
               >
                 <Text className="text-xl items-center text-white font-semibold ">
                   {item.libelle}

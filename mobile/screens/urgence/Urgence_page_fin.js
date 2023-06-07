@@ -81,7 +81,7 @@ export default function Urgence_page_fin({ navigation }) {
             onPress={() =>
               navigation.navigate("Pat_Ajout_Traitement", { urgence })
             }
-            className="self-center flex-row items-center justify-center p-3 shadow-sm bg-[#6ABD9B] w-60  mb-3 rounded-xl"
+            className="self-center flex-row items-center justify-center p-3 shadow-sm bg-[#00B4D8] w-60  mb-3 rounded-xl"
           >
             <Text className="font-bold text-lg ">Consult Now</Text>
             <AntDesign name="doubleright" size={24} color="black" />

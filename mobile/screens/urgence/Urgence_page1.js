@@ -68,7 +68,7 @@ export default function Urgence_page1({ navigation }) {
                   <Image
                     className="h-24 w-24 m-2 justify-center rounded-xl"
                     source={{
-                      uri: `${API_IMAGE_URL}/storage/${ item.image}`,
+                      uri: `${API_IMAGE_URL}/storage/${item.image}`,
                     }}
                   />
                 ) : (
